@@ -194,7 +194,20 @@ public final class JHex {
   }
 
   public static byte[] decode(final String hex) {
-    final char[] chars = hex.toCharArray();
+    return decode(hex.toCharArray());
+  }
+
+  public static byte[] decode(final char[] chars) {
+    final byte[] data = new byte[chars.length >> 1];
+    for (int i = 0, c = 0;;++c) {
+      data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
+      if (i == data.length) {
+        return data;
+      }
+    }
+  }
+
+  public static byte[] decode(final byte[] chars) {
     final byte[] data = new byte[chars.length >> 1];
     for (int i = 0, c = 0;;++c) {
       data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
@@ -205,10 +218,10 @@ public final class JHex {
   }
 
   public static byte[] decodeChecked(final String hex) {
-    if (hex == null) {
-      return new byte[0];
-    }
-    final char[] chars = hex.toCharArray();
+    return decodeChecked(hex.toCharArray());
+  }
+
+  public static byte[] decodeChecked(final char[] chars) {
     if (chars.length == 0) {
       return new byte[0];
     }
@@ -219,12 +232,12 @@ public final class JHex {
     for (int i = 0, c = 0;;++c) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, hex));
+        throw new IllegalStateException(formatExMsg(c, chars));
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, hex));
+        throw new IllegalStateException(formatExMsg(c, chars));
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
       if (i == data.length) {
@@ -233,25 +246,61 @@ public final class JHex {
     }
   }
 
+  public static byte[] decodeChecked(final byte[] chars) {
+    if (chars.length == 0) {
+      return new byte[0];
+    }
+    if ((chars.length & 1) != 0) {
+      throw new IllegalStateException("Hex encoding must have an even length.");
+    }
+    final byte[] data = new byte[chars.length >> 1];
+    for (int i = 0, c = 0;;++c) {
+      byte chr = chars[c];
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars[++c];
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      data[i++] = (byte) (bite | DIGITS[chr]);
+      if (i == data.length) {
+        return data;
+      }
+    }
+  }
+
+  private static String formatExMsg(final int pos, final char[] hex) {
+    return formatExMsg(pos, new String(hex));
+  }
+
   private static String formatExMsg(final int pos, final String hex) {
     return String.format("Invalid character for hex encoding at position %d for '%s'.", pos, hex);
   }
 
-  public static void decode(final String hex, final byte[] data, int offset) {
-    final char[] chars = hex.toCharArray();
+  private static String formatExMsg(final int pos) {
+    return String.format("Invalid character for hex encoding at position %d.", pos);
+  }
+
+  public static void decode(final String hex, final byte[] out, int offset) {
+    decode(hex.toCharArray(), out, offset);
+  }
+
+  public static void decode(final char[] chars, final byte[] out, int offset) {
     for (int c = 0;;++offset) {
-      data[offset] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
+      out[offset] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
       if (c == chars.length) {
         return;
       }
     }
   }
 
-  public static void decodeChecked(final String hex, final byte[] data, int offset) {
-    if (hex == null) {
-      return;
-    }
-    final char[] chars = hex.toCharArray();
+  public static void decodeChecked(final String hex, final byte[] out, int offset) {
+    decodeChecked(hex.toCharArray(), out, offset);
+  }
+
+  public static void decodeChecked(final char[] chars, final byte[] out, int offset) {
     if (chars.length == 0) {
       return;
     }
@@ -261,21 +310,21 @@ public final class JHex {
     for (int c = 0;;++offset) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, hex));
+        throw new IllegalStateException(formatExMsg(c, chars));
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, hex));
+        throw new IllegalStateException(formatExMsg(c, chars));
       }
-      data[offset] = (byte) (bite | DIGITS[chr]);
+      out[offset] = (byte) (bite | DIGITS[chr]);
       if (++c == chars.length) {
         return;
       }
     }
   }
 
-  public static byte[] decodePrimIter(final String hex) {
+  public static byte[] decodePrimIter(final CharSequence hex) {
     final byte[] data = new byte[hex.length() >> 1];
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     int index = 0;
@@ -285,11 +334,11 @@ public final class JHex {
     return data;
   }
 
-  public static void decodePrimIter(final String hex, final byte[] data, int offset) {
+  public static void decodePrimIter(final CharSequence hex, final byte[] out, int offset) {
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     final int max = offset + (hex.length() >> 1);
     do {
-      data[offset++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
+      out[offset++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
     } while (offset < max);
   }
 }

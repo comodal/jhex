@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class HexEncodeTest {
 
   static final String TEST_HEX =
-      "b3bd615f25765d5b5c43058f2a7a44916131b506ce9952d59ad2a5601899f8f9";
+      "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b";
 
   @Test
   public void decodeEncodeLower() {
