@@ -193,15 +193,11 @@ public final class JHex {
   }
 
   public static byte[] decode(final String hex) {
-    final int len = hex.length();
-    if (len == 0) {
-      return new byte[0];
-    }
-    final byte[] data = new byte[len >> 1];
     final char[] chars = hex.toCharArray();
-    for (int i = 0, c = 0;;i++) {
-      data[i] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
-      if (c == len) {
+    final byte[] data = new byte[chars.length >> 1];
+    for (int i = 0, c = 0;;++c) {
+      data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
+      if (i == data.length) {
         return data;
       }
     }
@@ -211,15 +207,14 @@ public final class JHex {
     if (hex == null) {
       return new byte[0];
     }
-    final int len = hex.length();
-    if (len == 0) {
+    final char[] chars = hex.toCharArray();
+    if (chars.length == 0) {
       return new byte[0];
     }
-    if ((len & 1) != 0) {
+    if ((chars.length & 1) != 0) {
       throw new IllegalStateException("Hex encoding must have an even length.");
     }
-    final byte[] data = new byte[len >> 1];
-    final char[] chars = hex.toCharArray();
+    final byte[] data = new byte[chars.length >> 1];
     for (int i = 0, c = 0;;++c) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
@@ -242,14 +237,10 @@ public final class JHex {
   }
 
   public static void decode(final String hex, final byte[] data, int offset) {
-    final int len = hex.length();
-    if (len == 0) {
-      return;
-    }
     final char[] chars = hex.toCharArray();
     for (int c = 0;;++offset) {
       data[offset] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
-      if (c == len) {
+      if (c == chars.length) {
         return;
       }
     }
@@ -259,14 +250,13 @@ public final class JHex {
     if (hex == null) {
       return;
     }
-    final int len = hex.length();
-    if (len == 0) {
+    final char[] chars = hex.toCharArray();
+    if (chars.length == 0) {
       return;
     }
-    if ((len & 1) != 0) {
+    if ((chars.length & 1) != 0) {
       throw new IllegalStateException("Hex encoding must have an even length.");
     }
-    final char[] chars = hex.toCharArray();
     for (int c = 0;;++offset) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
@@ -278,7 +268,7 @@ public final class JHex {
         throw new IllegalStateException(formatExMsg(c, hex));
       }
       data[offset] = (byte) (bite | DIGITS[chr]);
-      if (++c == len) {
+      if (++c == chars.length) {
         return;
       }
     }

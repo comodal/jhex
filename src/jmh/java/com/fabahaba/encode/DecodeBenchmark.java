@@ -28,39 +28,49 @@ import javax.xml.bind.DatatypeConverter;
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-@Warmup(iterations = 5)
+@Warmup(iterations = 10)
 @Measurement(iterations = 10)
 public class DecodeBenchmark {
 
-  private static final int NUM_ELEMENTS = 1 << 18;
+  private static final int NUM_ELEMENTS = 1 << 20;
   private static final int MASK = NUM_ELEMENTS - 1;
-  private static final int ELEMENT_LENGTH = 256;
+  private static final int ELEMENT_LENGTH = 32;
 
   @Param({
              "JHEX_CHAR_ITERATOR",
-             "JHEX_CODE_POINT_ITERATOR",
-             "JHEX_TO_CHAR_ARRAY",
              "JHEX_TO_CHAR_ARRAY_CHECKED",
+             "JHEX_TO_CHAR_ARRAY",
              "COMMONS_CODEC",
              "GUAVA",
              "JMX_DATATYPE_CONVERTER",
          })
   private DecodeFactory decodeType;
   private Function<String, byte[]> decodeFunction;
-  private final byte[][] data = new byte[NUM_ELEMENTS][ELEMENT_LENGTH];
   private final String[] hexStrings = new String[NUM_ELEMENTS];
 
   @Setup(Level.Iteration)
   public void setup() {
     if (decodeFunction == null) {
       decodeFunction = decodeType.createDecodeFunction();
+      IntStream.range(0, NUM_ELEMENTS).parallel()
+          .forEach(i -> {
+            final byte[] element = new byte[ELEMENT_LENGTH];
+            ThreadLocalRandom.current().nextBytes(element);
+            hexStrings[i] = JHex.encode(element);
+          });
+    } else {
+      shuffleArray(hexStrings);
     }
-    IntStream.range(0, NUM_ELEMENTS).parallel()
-        .forEach(i -> {
-          final byte[] element = data[i];
-          ThreadLocalRandom.current().nextBytes(element);
-          hexStrings[i] = JHex.encode(element);
-        });
+  }
+
+  static void shuffleArray(final Object[] array) {
+    final ThreadLocalRandom rand = ThreadLocalRandom.current();
+    for (int i = array.length - 1;i > 0;--i) {
+      int index = rand.nextInt(i + 1);
+      final Object swap = array[i];
+      array[i] = array[index];
+      array[index] = swap;
+    }
   }
 
   @Benchmark
@@ -86,12 +96,6 @@ public class DecodeBenchmark {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
         return JHexAlt::decodeCharIter;
-      }
-    },
-    JHEX_CODE_POINT_ITERATOR {
-      @Override
-      public Function<String, byte[]> createDecodeFunction() {
-        return JHexAlt::decodeCodePointIter;
       }
     },
     COMMONS_CODEC {

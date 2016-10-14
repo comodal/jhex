@@ -35,11 +35,7 @@ final class JHexAlt {
   }
 
   static byte[] decodeCharIter(final String hex) {
-    final int len = hex.length();
-    if (len == 0) {
-      return new byte[0];
-    }
-    final byte[] data = new byte[len >> 1];
+    final byte[] data = new byte[hex.length() >> 1];
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     int index = 0;
     do {
@@ -49,38 +45,8 @@ final class JHexAlt {
   }
 
   static void decodeCharIter(final String hex, final byte[] data, int offset) {
-    final int len = hex.length();
-    if (len == 0) {
-      return;
-    }
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
-    final int max = offset + (len >> 1);
-    do {
-      data[offset++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
-    } while (offset < max);
-  }
-
-  static byte[] decodeCodePointIter(final String hex) {
-    final int len = hex.length();
-    if (len == 0) {
-      return new byte[0];
-    }
-    final byte[] data = new byte[len >> 1];
-    final PrimitiveIterator.OfInt chars = hex.codePoints().iterator();
-    int index = 0;
-    do {
-      data[index++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
-    } while (index < data.length);
-    return data;
-  }
-
-  static void decodeCodePointIter(final String hex, final byte[] data, int offset) {
-    final int len = hex.length();
-    if (len == 0) {
-      return;
-    }
-    final PrimitiveIterator.OfInt chars = hex.codePoints().iterator();
-    final int max = offset + (len >> 1);
+    final int max = offset + (hex.length() >> 1);
     do {
       data[offset++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
     } while (offset < max);

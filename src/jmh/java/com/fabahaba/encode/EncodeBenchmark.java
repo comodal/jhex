@@ -23,6 +23,8 @@ import java.util.stream.IntStream;
 
 import javax.xml.bind.DatatypeConverter;
 
+import static com.fabahaba.encode.DecodeBenchmark.shuffleArray;
+
 @State(Scope.Benchmark)
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
@@ -58,9 +60,11 @@ public class EncodeBenchmark {
   public void setup() {
     if (encodeFunction == null) {
       encodeFunction = encodeType.createEncodeFunction();
+      IntStream.range(0, NUM_ELEMENTS).parallel()
+          .forEach(i -> ThreadLocalRandom.current().nextBytes(data[i]));
+    } else {
+      shuffleArray(data);
     }
-    IntStream.range(0, NUM_ELEMENTS).parallel()
-        .forEach(i -> ThreadLocalRandom.current().nextBytes(data[i]));
   }
 
   @Benchmark
