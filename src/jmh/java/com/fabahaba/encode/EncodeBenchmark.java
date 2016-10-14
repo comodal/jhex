@@ -50,14 +50,9 @@ public class EncodeBenchmark {
   private Function<byte[], String> encodeFunction;
   private final byte[][] data = new byte[NUM_ELEMENTS][ELEMENT_LENGTH];
 
-  @State(Scope.Thread)
-  public static class ThreadState {
-
-    int index = 0;
-  }
-
   @Setup(Level.Iteration)
-  public void setup() {
+  public void setup(final ThreadState threadState) {
+    threadState.index = 0;
     if (encodeFunction == null) {
       encodeFunction = encodeType.createEncodeFunction();
       IntStream.range(0, NUM_ELEMENTS).parallel()

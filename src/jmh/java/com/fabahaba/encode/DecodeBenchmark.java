@@ -49,7 +49,8 @@ public class DecodeBenchmark {
   private final String[] hexStrings = new String[NUM_ELEMENTS];
 
   @Setup(Level.Iteration)
-  public void setup() {
+  public void setup(final ThreadState threadState) {
+    threadState.index = 0;
     if (decodeFunction == null) {
       decodeFunction = decodeType.createDecodeFunction();
       IntStream.range(0, NUM_ELEMENTS).parallel()
@@ -74,7 +75,7 @@ public class DecodeBenchmark {
   }
 
   @Benchmark
-  public byte[] run(final EncodeBenchmark.ThreadState threadState) {
+  public byte[] run(final ThreadState threadState) {
     return decodeFunction.apply(hexStrings[threadState.index++ & MASK]);
   }
 
