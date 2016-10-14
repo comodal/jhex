@@ -1,2 +1,2 @@
 # jhex
-Just Hex (En|De)coding
+Just Hex (En|De)coding for Java.
