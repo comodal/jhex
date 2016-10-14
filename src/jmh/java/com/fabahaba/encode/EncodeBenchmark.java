@@ -37,9 +37,9 @@ public class EncodeBenchmark {
 
   @Param({
              "JHEX_BYTE_STR_CTOR",
-             "JHEX",
              "JHEX_UPPER",
              "JHEX_REVERSE",
+             "JHEX",
              "COMMONS_CODEC",
              "GUAVA",
              "JMX_DATATYPE_CONVERTER",

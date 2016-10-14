@@ -32,15 +32,15 @@ import javax.xml.bind.DatatypeConverter;
 @Measurement(iterations = 10)
 public class DecodeBenchmark {
 
-  private static final int NUM_ELEMENTS = 1 << 20;
+  private static final int NUM_ELEMENTS = 1 << 18;
   private static final int MASK = NUM_ELEMENTS - 1;
-  private static final int ELEMENT_LENGTH = 32;
+  private static final int ELEMENT_LENGTH = 256;
 
   @Param({
-             "JHEX_TO_CHAR_ARRAY_CHECKED",
              "JHEX_CHAR_ITERATOR",
              "JHEX_CODE_POINT_ITERATOR",
              "JHEX_TO_CHAR_ARRAY",
+             "JHEX_TO_CHAR_ARRAY_CHECKED",
              "COMMONS_CODEC",
              "GUAVA",
              "JMX_DATATYPE_CONVERTER",
