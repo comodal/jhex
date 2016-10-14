@@ -60,6 +60,36 @@ public class HexEncodeTest {
     assertEquals(upperHex, JHex.encodeUpper(upper));
   }
 
+  @Test
+  public void decodePrimIterOffsetEncodeLower() {
+    final byte[] lower = new byte[TEST_HEX.length() >> 1];
+    JHex.decodePrimIter(TEST_HEX, lower, 0);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodePrimIterEncodeLower() {
+    final byte[] lower = JHex.decodePrimIter(TEST_HEX);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodePrimIterEncodeReverse() {
+    final byte[] lower = JHex.decodePrimIter(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertEquals(TEST_HEX, JHex.encodeReverse(reverse, 31, 32));
+  }
+
+  @Test
+  public void decodePrimIterEncodeUpper() {
+    final byte[] lower = JHex.decodePrimIter(TEST_HEX);
+    final String upperHex = TEST_HEX.toUpperCase(Locale.ENGLISH);
+    assertEquals(upperHex, JHex.encodeUpper(lower));
+    final byte[] upper = JHex.decodePrimIter(upperHex);
+    assertEquals(TEST_HEX, JHex.encode(upper));
+    assertEquals(upperHex, JHex.encodeUpper(upper));
+  }
+
   static byte[] copyReverse(final byte[] data) {
     return copyReverse(data, 0, data.length);
   }

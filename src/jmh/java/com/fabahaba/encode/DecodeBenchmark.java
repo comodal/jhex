@@ -96,7 +96,7 @@ public class DecodeBenchmark {
     JHEX_CHAR_ITERATOR {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return JHexAlt::decodeCharIter;
+        return JHex::decodePrimIter;
       }
     },
     COMMONS_CODEC {
