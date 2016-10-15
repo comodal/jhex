@@ -14,10 +14,10 @@ String reEncoded = JHex.encode(decoded);
 
 I'm using this project to try out tool integration with Java 9 and some other new things.
 
-- [x] Gradle JMH plugin.
-- [x] Java 9 Primitive Iterator performance.
+- [x] [Gradle JMH plugin](https://github.com/melix/jmh-gradle-plugin).
+- [x] Java 9 String#chars() performance compared to String#toCharArray().
 - [x] JUnit 5 with Java 9 & Gradle.
-- [x] JUnit 5 & Jacoco & codecov.io integration.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
+- [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & codecov.io integration.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
 - [x] JDK 9 on Travis CI.
 - [ ] Gradle findbugs plugin.  Waiting on version 3.1.
 
