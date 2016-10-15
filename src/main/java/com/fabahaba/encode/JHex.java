@@ -1,5 +1,6 @@
 package com.fabahaba.encode;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.PrimitiveIterator;
 
@@ -40,7 +41,15 @@ public final class JHex {
     return new String(encode(data, UPPER));
   }
 
-  private static char[] encode(byte[] data, char[] alpha) {
+  public static char[] encodeChars(final byte[] data) {
+    return encode(data, LOWER);
+  }
+
+  public static char[] encodeUpperChars(final byte[] data) {
+    return encode(data, UPPER);
+  }
+
+  private static char[] encode(final byte[] data, final char[] alpha) {
     final int len = data.length;
     final char[] hex = new char[len << 1];
     for (int i = 0, h = 0, d;i < len;) {
@@ -51,7 +60,15 @@ public final class JHex {
     return hex;
   }
 
-  static byte[] encode(byte[] data, byte[] alpha) {
+  public static byte[] encodeBytes(final byte[] data) {
+    return encodeBytes(data, LOWER_BYTES);
+  }
+
+  public static byte[] encodeUpperBytes(final byte[] data) {
+    return encodeBytes(data, UPPER_BYTES);
+  }
+
+  static byte[] encodeBytes(final byte[] data, final byte[] alpha) {
     final int len = data.length;
     final byte[] hex = new byte[len << 1];
     for (int i = 0, h = 0, d;i < len;) {
@@ -62,12 +79,50 @@ public final class JHex {
     return hex;
   }
 
-  public static char[] encodeChars(final byte[] data) {
+  public static String encode(final ByteBuffer data) {
+    return new String(encode(data, LOWER));
+  }
+
+  public static String encodeUpper(final ByteBuffer data) {
+    return new String(encode(data, UPPER));
+  }
+
+  public static char[] encodeChars(final ByteBuffer data) {
     return encode(data, LOWER);
   }
 
-  public static char[] encodeUpperChars(final byte[] data) {
+  public static char[] encodeUpperChars(final ByteBuffer data) {
     return encode(data, UPPER);
+  }
+
+  private static char[] encode(final ByteBuffer data, final char[] alpha) {
+    final int len = data.limit();
+    final char[] hex = new char[len << 1];
+    for (int h = 0, d;h < hex.length;) {
+      d = data.get() & 0xff;
+      hex[h++] = alpha[d >>> 4];
+      hex[h++] = alpha[d & 0xf];
+    }
+    return hex;
+  }
+
+  public static byte[] encodeBytes(final ByteBuffer data) {
+    return encodeBytes(data, LOWER_BYTES);
+  }
+
+  public static byte[] encodeUpperBytes(final ByteBuffer data) {
+    return encodeBytes(data, UPPER_BYTES);
+  }
+
+  static byte[] encodeBytes(final ByteBuffer data, final byte[] alpha) {
+    final int len = data.limit();
+    final byte[] hex = new byte[len << 1];
+    for (int h = 0, d;h < hex.length;) {
+      d = data.get() & 0xff;
+      hex[h++] = alpha[d >>> 4];
+      hex[h++] = alpha[d & 0xf];
+    }
+    return hex;
   }
 
   public static String encode(final byte[] data, int offset, final int len) {
@@ -76,6 +131,14 @@ public final class JHex {
 
   public static String encodeUpper(final byte[] data, int offset, final int len) {
     return new String(encode(data, offset, len, UPPER));
+  }
+
+  public static char[] encodeChars(final byte[] data, int offset, final int len) {
+    return encode(data, offset, len, LOWER);
+  }
+
+  public static char[] encodeUpperChars(final byte[] data, int offset, final int len) {
+    return encode(data, offset, len, UPPER);
   }
 
   private static char[] encode(final byte[] data, int offset, final int len, final char[] alpha) {
@@ -93,15 +156,59 @@ public final class JHex {
     }
   }
 
-  public static byte[] encodeBytes(final byte[] data) {
-    return encode(data, LOWER_BYTES);
+  public static String encode(final ByteBuffer data, final int len) {
+    return new String(encode(data, len, LOWER));
   }
 
-  public static byte[] encodeUpperBytes(final byte[] data) {
-    return encode(data, UPPER_BYTES);
+  public static String encodeUpper(final ByteBuffer data, final int len) {
+    return new String(encode(data, len, UPPER));
   }
 
-  static byte[] encode(final byte[] data, int offset, final int len, final byte[] alpha) {
+  public static char[] encodeChars(final ByteBuffer data, final int len) {
+    return encode(data, len, LOWER);
+  }
+
+  public static char[] encodeUpperChars(final ByteBuffer data, final int len) {
+    return encode(data, len, UPPER);
+  }
+
+  private static char[] encode(final ByteBuffer data, final int len, final char[] alpha) {
+    final char[] hex = new char[len << 1];
+    for (int i = 0, d;i < hex.length;) {
+      d = data.get() & 0xff;
+      hex[i++] = alpha[d >>> 4];
+      hex[i++] = alpha[d & 0xf];
+    }
+    return hex;
+  }
+
+  public static byte[] encodeBytes(final ByteBuffer data, final int len) {
+    return encodeBytes(data, len, LOWER_BYTES);
+  }
+
+  public static byte[] encodeUpperBytes(final ByteBuffer data, final int len) {
+    return encodeBytes(data, len, UPPER_BYTES);
+  }
+
+  private static byte[] encodeBytes(final ByteBuffer data, final int len, final byte[] alpha) {
+    final byte[] hex = new byte[len << 1];
+    for (int i = 0, d;i < hex.length;) {
+      d = data.get() & 0xff;
+      hex[i++] = alpha[d >>> 4];
+      hex[i++] = alpha[d & 0xf];
+    }
+    return hex;
+  }
+
+  public static byte[] encodeBytes(final byte[] data, int offset, final int len) {
+    return encodeBytes(data, offset, len, LOWER_BYTES);
+  }
+
+  public static byte[] encodeUpperBytes(final byte[] data, int offset, final int len) {
+    return encodeBytes(data, offset, len, UPPER_BYTES);
+  }
+
+  static byte[] encodeBytes(final byte[] data, int offset, final int len, final byte[] alpha) {
     if (len == 0) {
       return new byte[0];
     }
@@ -124,6 +231,14 @@ public final class JHex {
     return new String(encodeReverse(data, offset, len, UPPER));
   }
 
+  public static char[] encodeReverseChars(final byte[] data, int offset, final int len) {
+    return encodeReverse(data, offset, len, LOWER);
+  }
+
+  public static char[] encodeUpperReverseChars(final byte[] data, int offset, final int len) {
+    return encodeReverse(data, offset, len, UPPER);
+  }
+
   private static char[] encodeReverse(final byte[] data, int offset, final int len,
       final char[] alpha) {
     if (len == 0) {
@@ -140,7 +255,48 @@ public final class JHex {
     }
   }
 
-  static byte[] encodeReverse(final byte[] data, int offset, final int len, final byte[] alpha) {
+  public static String encodeReverse(final ByteBuffer data, int offset, final int len) {
+    return new String(encodeReverse(data, offset, len, LOWER));
+  }
+
+  public static String encodeUpperReverse(final ByteBuffer data, int offset, final int len) {
+    return new String(encodeReverse(data, offset, len, UPPER));
+  }
+
+  public static char[] encodeReverseChars(final ByteBuffer data, int offset, final int len) {
+    return encodeReverse(data, offset, len, LOWER);
+  }
+
+  public static char[] encodeUpperReverseChars(final ByteBuffer data, int offset, final int len) {
+    return encodeReverse(data, offset, len, UPPER);
+  }
+
+  private static char[] encodeReverse(final ByteBuffer data, int offset, final int len,
+      final char[] alpha) {
+    if (len == 0) {
+      return new char[0];
+    }
+    final char[] hex = new char[len << 1];
+    for (int i = 0, d;;--offset) {
+      d = data.get(offset) & 0xff;
+      hex[i++] = alpha[d >>> 4];
+      hex[i++] = alpha[d & 0xf];
+      if (i == hex.length) {
+        return hex;
+      }
+    }
+  }
+
+  public static byte[] encodeReverseBytes(final byte[] data, int offset, final int len) {
+    return encodeReverseBytes(data, offset, len, LOWER_BYTES);
+  }
+
+  public static byte[] encodeUpperReverseBytes(final byte[] data, int offset, final int len) {
+    return encodeReverseBytes(data, offset, len, UPPER_BYTES);
+  }
+
+  static byte[] encodeReverseBytes(final byte[] data, int offset, final int len,
+      final byte[] alpha) {
     if (len == 0) {
       return new byte[0];
     }
@@ -155,12 +311,28 @@ public final class JHex {
     }
   }
 
-  public static char[] encodeChars(final byte[] data, int offset, final int len) {
-    return encode(data, offset, len, LOWER);
+  public static byte[] encodeReverseBytes(final ByteBuffer data, int offset, final int len) {
+    return encodeReverseBytes(data, offset, len, LOWER_BYTES);
   }
 
-  public static char[] encodeUpperChars(final byte[] data, int offset, final int len) {
-    return encode(data, offset, len, UPPER);
+  public static byte[] encodeUpperReverseBytes(final ByteBuffer data, int offset, final int len) {
+    return encodeReverseBytes(data, offset, len, UPPER_BYTES);
+  }
+
+  static byte[] encodeReverseBytes(final ByteBuffer data, int offset, final int len,
+      final byte[] alpha) {
+    if (len == 0) {
+      return new byte[0];
+    }
+    final byte[] hex = new byte[len << 1];
+    for (int i = 0, d;;--offset) {
+      d = data.get(offset) & 0xff;
+      hex[i++] = alpha[d >>> 4];
+      hex[i++] = alpha[d & 0xf];
+      if (i == hex.length) {
+        return hex;
+      }
+    }
   }
 
   public static boolean isValid(final String hex) {
@@ -217,6 +389,15 @@ public final class JHex {
     }
   }
 
+  public static byte[] decode(final ByteBuffer chars) {
+    final byte[] data = new byte[chars.limit() >> 1];
+    int index = 0;
+    do {
+      data[index++] = (byte) (DIGITS[chars.get()] << 4 | DIGITS[chars.get()]);
+    } while (index < data.length);
+    return data;
+  }
+
   public static byte[] decodeChecked(final String hex) {
     return decodeChecked(hex.toCharArray());
   }
@@ -232,12 +413,12 @@ public final class JHex {
     for (int i = 0, c = 0;;++c) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, chars));
+        throw new IllegalStateException(formatExMsg(c));
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, chars));
+        throw new IllegalStateException(formatExMsg(c));
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
       if (i == data.length) {
@@ -271,16 +452,34 @@ public final class JHex {
     }
   }
 
-  private static String formatExMsg(final int pos, final char[] hex) {
-    return formatExMsg(pos, new String(hex));
-  }
-
-  private static String formatExMsg(final int pos, final String hex) {
-    return String.format("Invalid character for hex encoding at position %d for '%s'.", pos, hex);
+  public static byte[] decodeChecked(final ByteBuffer chars) {
+    final int len = chars.limit();
+    if (len == 0) {
+      return new byte[0];
+    }
+    if ((len & 1) != 0) {
+      throw new IllegalStateException("Hex encoding must have an even length.");
+    }
+    final byte[] data = new byte[len >> 1];
+    for (int i = 0, c = 0;;++c) {
+      byte chr = chars.get();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars.get();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      data[i++] = (byte) (bite | DIGITS[chr]);
+      if (i == data.length) {
+        return data;
+      }
+    }
   }
 
   private static String formatExMsg(final int pos) {
-    return String.format("Invalid character for hex encoding at position %d.", pos);
+    return "Invalid character for hex encoding at position " + pos;
   }
 
   public static void decode(final String hex, final byte[] out, int offset) {
@@ -310,15 +509,64 @@ public final class JHex {
     for (int c = 0;;++offset) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, chars));
+        throw new IllegalStateException(formatExMsg(c));
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c, chars));
+        throw new IllegalStateException(formatExMsg(c));
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
       if (++c == chars.length) {
+        return;
+      }
+    }
+  }
+
+  public static void decodeChecked(final byte[] chars, final byte[] out, int offset) {
+    if (chars.length == 0) {
+      return;
+    }
+    if ((chars.length & 1) != 0) {
+      throw new IllegalStateException("Hex encoding must have an even length.");
+    }
+    for (int c = 0;;++offset) {
+      byte chr = chars[c];
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars[++c];
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      out[offset] = (byte) (bite | DIGITS[chr]);
+      if (++c == chars.length) {
+        return;
+      }
+    }
+  }
+
+  public static void decodeChecked(final ByteBuffer buffer, final byte[] out, int offset) {
+    final int len = buffer.limit();
+    if (len == 0) {
+      return;
+    }
+    if ((len & 1) != 0) {
+      throw new IllegalStateException("Hex encoding must have an even length.");
+    }
+    for (int c = 0;;++offset) {
+      byte chr = buffer.get();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = buffer.get();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(c));
+      }
+      out[offset] = (byte) (bite | DIGITS[chr]);
+      if (++c == len) {
         return;
       }
     }

@@ -2,6 +2,7 @@ package com.fabahaba.encode;
 
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Random;
@@ -53,6 +54,18 @@ public class CommonsCodecTests {
   }
 
   @Test
+  public void testDecodeByteBufferEmpty() {
+    assertArrayEquals(new byte[0], JHex.decodeChecked(ByteBuffer.allocate(0)));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testDecodeByteBufferOddCharacters() {
+    final ByteBuffer buffer = ByteBuffer.allocate(1);
+    buffer.put((byte) 65);
+    JHex.decodeChecked(buffer);
+  }
+
+  @Test
   public void testDecodeHexStringEmpty() {
     assertArrayEquals(new byte[0], JHex.decodeChecked(""));
   }
@@ -65,6 +78,16 @@ public class CommonsCodecTests {
   @Test
   public void testEncodeByteArrayEmpty() {
     assertArrayEquals(new char[0], JHex.encodeChars(new byte[0]));
+  }
+
+  @Test
+  public void testEncodeByteBufferEmpty() {
+    assertArrayEquals(new byte[0], JHex.encodeBytes(ByteBuffer.allocate(0)));
+  }
+
+  @Test
+  public void testEncodeCharsByteBufferEmpty() {
+    assertArrayEquals(new char[0], JHex.encodeChars(ByteBuffer.allocate(0)));
   }
 
   @Test
@@ -107,27 +130,53 @@ public class CommonsCodecTests {
 
   @Test
   public void testEncodeHexByteArrayHelloWorldLowerCaseHex() {
-    final byte[] b = "Hello World".getBytes(StandardCharsets.UTF_8);
+    final byte[] data = "Hello World".getBytes(StandardCharsets.UTF_8);
     final String expected = "48656c6c6f20576f726c64";
     char[] actual;
-    actual = JHex.encodeChars(b);
+    actual = JHex.encodeChars(data);
     assertEquals(expected, new String(actual));
-    actual = JHex.encodeUpperChars(b);
+    actual = JHex.encodeUpperChars(data);
     assertEquals(expected.toUpperCase(Locale.ENGLISH), new String(actual));
   }
 
   @Test
-  public void testEncodeHexByteArrayZeroes() {
-    final char[] c = JHex.encodeChars(new byte[36]);
+  public void testEncodeHexByteBufferHelloWorldLowerCaseHex() {
+    final ByteBuffer buffer = ByteBuffer.wrap("Hello World".getBytes(StandardCharsets.UTF_8));
+    final String expected = "48656c6c6f20576f726c64";
+    char[] actual;
+    actual = JHex.encodeChars(buffer);
+    assertEquals(expected, new String(actual));
+    buffer.flip();
+    actual = JHex.encodeUpperChars(buffer);
+    assertEquals(expected.toUpperCase(Locale.ENGLISH), new String(actual));
+  }
+
+  @Test
+  public void testEncodeHex_ByteBufferOfZeroes() {
+    final char[] chars = JHex.encodeChars(ByteBuffer.allocate(36));
     assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
-        new String(c));
+        new String(chars));
+  }
+
+  @Test
+  public void testEncodeHexByteString_ByteBufferOfZeroes() {
+    final String chars = JHex.encode(ByteBuffer.allocate(36));
+    assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
+        chars);
+  }
+
+  @Test
+  public void testEncodeHexByteArrayZeroes() {
+    final char[] chars = JHex.encodeChars(new byte[36]);
+    assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
+        new String(chars));
   }
 
   @Test
   public void testEncodeHexByteString_ByteArrayOfZeroes() {
-    final String c = JHex.encode(new byte[36]);
+    final String chars = JHex.encode(new byte[36]);
     assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
-        c);
+        chars);
   }
 
   @Test
@@ -138,5 +187,15 @@ public class CommonsCodecTests {
   @Test
   public void testEncodeHexByteString_ByteArrayBoolean_ToUpperCase() {
     assertEquals("0A", JHex.encodeUpper(new byte[]{10}));
+  }
+
+  @Test
+  public void testEncodeHexByteString_ByteBufferBoolean_ToLowerCase() {
+    assertEquals("0a", JHex.encode(ByteBuffer.wrap(new byte[]{10})));
+  }
+
+  @Test
+  public void testEncodeHexByteString_ByteBufferBoolean_ToUpperCase() {
+    assertEquals("0A", JHex.encodeUpper(ByteBuffer.wrap(new byte[]{10})));
   }
 }
