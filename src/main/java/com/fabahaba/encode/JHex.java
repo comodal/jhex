@@ -33,6 +33,19 @@ public final class JHex {
     }
   }
 
+  private static RuntimeException createIllegalLengthException(final int len) {
+    return new IllegalArgumentException(String.format("Invalid hex encoding length of %d.", len));
+  }
+
+  private static RuntimeException createIllegalCharException(final byte chr, final int pos) {
+    return createIllegalCharException((char) chr, pos);
+  }
+
+  private static RuntimeException createIllegalCharException(final char chr, final int pos) {
+    return new IllegalArgumentException(String
+        .format("Invalid character '%c' for hex encoding at position %d.", chr, pos));
+  }
+
   public static String encode(final byte[] data) {
     return new String(encode(data, LOWER));
   }
@@ -416,18 +429,18 @@ public final class JHex {
       return new byte[0];
     }
     if ((chars.length & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(chars.length);
     }
     final byte[] data = new byte[chars.length >> 1];
     for (int i = 0, c = 0;;++c) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
       if (i == data.length) {
@@ -441,18 +454,18 @@ public final class JHex {
       return new byte[0];
     }
     if ((chars.length & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(chars.length);
     }
     final byte[] data = new byte[chars.length >> 1];
     for (int i = 0, c = 0;;++c) {
       byte chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
       if (i == data.length) {
@@ -467,28 +480,24 @@ public final class JHex {
       return new byte[0];
     }
     if ((len & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(len);
     }
     final byte[] data = new byte[len >> 1];
     for (int i = 0, c = 0;;++c) {
       byte chr = chars.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
       if (i == data.length) {
         return data;
       }
     }
-  }
-
-  private static String formatExMsg(final int pos) {
-    return "Invalid character for hex encoding at position " + pos;
   }
 
   public static void decode(final String hex, final byte[] out, int offset) {
@@ -510,17 +519,17 @@ public final class JHex {
       return;
     }
     if ((chars.length & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(chars.length);
     }
     for (int c = 0;;++offset) {
       char chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
       if (++c == chars.length) {
@@ -534,17 +543,17 @@ public final class JHex {
       return;
     }
     if ((chars.length & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(chars.length);
     }
     for (int c = 0;;++offset) {
       byte chr = chars[c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
       if (++c == chars.length) {
@@ -559,17 +568,17 @@ public final class JHex {
       return;
     }
     if ((len & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(len);
     }
     for (int c = 0;;++offset) {
       byte chr = buffer.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = buffer.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(++c));
+        throw createIllegalCharException(chr, ++c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
       c += 2;
@@ -598,19 +607,19 @@ public final class JHex {
       return new byte[0];
     }
     if ((len & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(len);
     }
     final byte[] data = new byte[len >> 1];
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     for (int index = 0;index < data.length;) {
       int chr = chars.nextInt();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(index * 2));
+        throw createIllegalCharException((char) chr, index * 2);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.nextInt();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg((index * 2) + 1));
+        throw createIllegalCharException((char) chr, (index * 2) + 1);
       }
       data[index++] = (byte) (bite | DIGITS[chr]);
     }
@@ -631,18 +640,18 @@ public final class JHex {
       return;
     }
     if ((len & 1) != 0) {
-      throw new IllegalStateException("Hex encoding must have an even length.");
+      throw createIllegalLengthException(len);
     }
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     for (int index = 0;chars.hasNext();index += 2) {
       int chr = chars.nextInt();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(index));
+        throw createIllegalCharException((char) chr, index);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.nextInt();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(index + 1));
+        throw createIllegalCharException((char) chr, index + 1);
       }
       out[offset++] = (byte) (bite | DIGITS[chr]);
     }

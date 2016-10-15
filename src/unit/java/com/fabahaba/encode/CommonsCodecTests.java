@@ -10,37 +10,50 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CommonsCodecTests {
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeCheckedHexCharArrayOddCharacters1() {
-    JHex.decodeChecked(new char[]{'A'});
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(new char[]{'A'})).getMessage());
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeCheckedHexStringOddCharacters1() {
-    JHex.decodeChecked("A");
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("A")).getMessage());
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeCheckedHexCharArrayOddCharacters3() {
-    JHex.decodeChecked(new char[]{'A', 'B', 'C'});
+    assertEquals("Invalid hex encoding length of 3.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(new char[]{'A', 'B', 'C'})).getMessage());
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeCheckedHexCharArrayOddCharacters5() {
-    JHex.decodeChecked(new char[]{'A', 'B', 'C', 'D', 'E'});
+    assertEquals("Invalid hex encoding length of 5.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(new char[]{'A', 'B', 'C', 'D', 'E'})).getMessage());
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeBadCharacterPos0() {
-    JHex.decodeChecked("q0");
+    assertEquals("Invalid character 'q' for hex encoding at position 0.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("q0")).getMessage());
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeBadCharacterPos1() {
-    JHex.decodeChecked("0q");
+    assertEquals("Invalid character 'q' for hex encoding at position 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("0q")).getMessage());
   }
 
   @Test
@@ -48,9 +61,11 @@ public class CommonsCodecTests {
     assertArrayEquals(new byte[0], JHex.decodeChecked(new char[0]));
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeByteArrayOddCharacters() {
-    JHex.decodeChecked(new char[]{65});
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(new char[]{65})).getMessage());
   }
 
   @Test
@@ -58,11 +73,13 @@ public class CommonsCodecTests {
     assertArrayEquals(new byte[0], JHex.decodeChecked(ByteBuffer.allocate(0)));
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeByteBufferOddCharacters() {
     final ByteBuffer buffer = ByteBuffer.allocate(1);
     buffer.put((byte) 65);
-    JHex.decodeChecked(buffer);
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(buffer)).getMessage());
   }
 
   @Test
@@ -70,9 +87,11 @@ public class CommonsCodecTests {
     assertArrayEquals(new byte[0], JHex.decodeChecked(""));
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testDecodeHexStringOddCharacters() {
-    JHex.decodeChecked("6");
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("6")).getMessage());
   }
 
   @Test

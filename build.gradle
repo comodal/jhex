@@ -42,7 +42,9 @@ repositories {
 }
 
 dependencies {
-  testCompile 'junit:junit:+'
+  testCompile 'org.junit.platform:junit-platform-runner:+'
+  testCompile 'org.junit.jupiter:junit-jupiter-api:+'
+  testCompile 'org.junit.jupiter:junit-jupiter-engine:+'
 
   jmh 'commons-codec:commons-codec:+'
   jmh 'com.google.guava:guava:+'

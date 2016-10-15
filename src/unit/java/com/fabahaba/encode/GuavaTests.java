@@ -60,27 +60,27 @@ public class GuavaTests {
     assertArrayEquals(decoded.getBytes(UTF_8), decoder.apply(encoded));
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testBase16InvalidDecodingNewlines() {
     JHex.decodeChecked("\n\n");
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testBase16InvalidDecodingG() {
     JHex.decodeChecked("EFGH");
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testBase16ValidDecodingOddLength1() {
     JHex.decodeChecked("A");
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testBase16ValidDecodingOddLength3() {
     JHex.decodeChecked("ABC");
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testBase16InvalidDecodingOddLength1() {
     JHex.decodeChecked("?");
   }

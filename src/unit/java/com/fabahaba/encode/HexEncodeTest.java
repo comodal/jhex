@@ -169,6 +169,93 @@ public class HexEncodeTest {
   }
 
   @Test
+  public void encodeReverseChars() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.toCharArray(), JHex.encodeReverseChars(reverse, 31, 32));
+  }
+
+  @Test
+  public void encodeReverseBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.getBytes(US_ASCII), JHex.encodeReverseBytes(reverse, 31, 32));
+  }
+
+  @Test
+  public void encodeUpperReverseBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).getBytes(US_ASCII),
+        JHex.encodeUpperReverseBytes(reverse, 31, 32));
+  }
+
+  @Test
+  public void encodeUpperReverse() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertEquals(TEST_HEX.toUpperCase(Locale.ENGLISH),
+        JHex.encodeUpperReverse(reverse, 31, 32));
+  }
+
+  @Test
+  public void encodeUpperReverseChars() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).toCharArray(),
+        JHex.encodeUpperReverseChars(reverse, 31, 32));
+  }
+
+
+  @Test
+  public void encodeByteBufferReverse() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertEquals(TEST_HEX,
+        JHex.encodeReverse(ByteBuffer.wrap(reverse), 31, 32));
+  }
+
+  @Test
+  public void encodeByteBufferUpperReverse() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertEquals(TEST_HEX.toUpperCase(Locale.ENGLISH),
+        JHex.encodeUpperReverse(ByteBuffer.wrap(reverse), 31, 32));
+  }
+
+  @Test
+  public void encodeByteBufferReverseChars() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.toCharArray(),
+        JHex.encodeReverseChars(ByteBuffer.wrap(reverse), 31, 32));
+  }
+
+  @Test
+  public void encodeByteBufferUpperReverseChars() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).toCharArray(),
+        JHex.encodeUpperReverseChars(ByteBuffer.wrap(reverse), 31, 32));
+  }
+
+  @Test
+  public void encodeByteBufferReverseBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.getBytes(US_ASCII),
+        JHex.encodeReverseBytes(ByteBuffer.wrap(reverse), 31, 32));
+  }
+
+  @Test
+  public void encodeUpperByteBufferReverseBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] reverse = copyReverse(lower);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).getBytes(US_ASCII),
+        JHex.encodeUpperReverseBytes(ByteBuffer.wrap(reverse), 31, 32));
+  }
+
+  @Test
   public void decodeEncodeUpper() {
     final byte[] lower = JHex.decode(TEST_HEX);
     final String upperHex = TEST_HEX.toUpperCase(Locale.ENGLISH);
