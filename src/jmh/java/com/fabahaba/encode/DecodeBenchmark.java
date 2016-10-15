@@ -28,18 +28,19 @@ import javax.xml.bind.DatatypeConverter;
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-@Warmup(iterations = 10)
+@Warmup(iterations = 5)
 @Measurement(iterations = 10)
 public class DecodeBenchmark {
 
-  private static final int NUM_ELEMENTS = 1 << 20;
+  private static final int NUM_ELEMENTS = 1 << 23;
   private static final int MASK = NUM_ELEMENTS - 1;
   private static final int ELEMENT_LENGTH = 32;
 
   @Param({
              "JHEX_CHAR_ITERATOR",
-             "JHEX_TO_CHAR_ARRAY_CHECKED",
              "JHEX_TO_CHAR_ARRAY",
+             "JHEX_CHAR_ITERATOR_CHECKED",
+             "JHEX_TO_CHAR_ARRAY_CHECKED",
              "COMMONS_CODEC",
              "GUAVA",
              "JMX_DATATYPE_CONVERTER",
@@ -97,6 +98,12 @@ public class DecodeBenchmark {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
         return JHex::decodePrimIter;
+      }
+    },
+    JHEX_CHAR_ITERATOR_CHECKED {
+      @Override
+      public Function<String, byte[]> createDecodeFunction() {
+        return JHex::decodePrimIterChecked;
       }
     },
     COMMONS_CODEC {

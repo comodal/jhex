@@ -29,7 +29,7 @@ import static com.fabahaba.encode.DecodeBenchmark.shuffleArray;
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-@Warmup(iterations = 10)
+@Warmup(iterations = 5)
 @Measurement(iterations = 10)
 public class EncodeBenchmark {
 

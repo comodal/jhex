@@ -347,11 +347,18 @@ public class HexEncodeTest {
     assertArrayEquals(new byte[0], JHex.decodeChecked(new char[0]));
     assertArrayEquals(new byte[0], JHex.decodeChecked(new byte[0]));
     assertArrayEquals(new byte[0], JHex.decodeChecked(ByteBuffer.wrap(new byte[0])));
-    final byte[] empty = new byte[4];
-    JHex.decodePrimIterChecked("", empty, 0);
-    assertArrayEquals(new byte[4], empty);
     assertArrayEquals(new byte[0], JHex.decodePrimIterChecked(""));
     assertArrayEquals(new byte[0], JHex.decodePrimIter(""));
+
+    final byte[] empty = new byte[4];
+    JHex.decodeChecked(new byte[0], empty, 0);
+    assertArrayEquals(new byte[4], empty);
+    JHex.decodeChecked(new char[0], empty, 0);
+    assertArrayEquals(new byte[4], empty);
+    JHex.decodeChecked(ByteBuffer.wrap(new byte[0]), empty, 0);
+    assertArrayEquals(new byte[4], empty);
+    JHex.decodePrimIterChecked("", empty, 0);
+    assertArrayEquals(new byte[4], empty);
   }
 
   @Test
@@ -443,6 +450,7 @@ public class HexEncodeTest {
   @Test
   public void testIsValidUtil() {
     assertTrue(JHex.isValid("42"));
+    assertTrue(JHex.isValid("4242"));
     assertTrue(JHex.isValid(""));
 
     assertFalse(JHex.isValid("!!"));
