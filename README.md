@@ -13,12 +13,29 @@ String reEncoded = JHex.encode(decoded);
 ###Benchmarks
 ######Environment
 * Intel® Xeon(R) CPU E5-2687W v3 @ 3.10GHz × 20 / 128GB Memory / Ubuntu 16.04
-* VM: JDK 9-ea+140 / options: -server -Xmx4G
+* VM: JDK 9-ea+140 / options: -server -Xmx16G
+* JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations.
 
-####Decoding
+Each benchmark method encodes or decodes an element from an array of 8388608 randomly generated elements.  The array is shuffled between each JMH iteration.
 
-> JMH 1.15, 1 thread, 10 warm-up & 20 measurement iterations.
+####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
 
-####Encoding
+##### 8 byte elements
+![decode-8-byte-elements](benchmark/decode-8-byte-elements.svg)
+##### 32 byte elements
+![decode-32-byte-elements](benchmark/decode-32-byte-elements.svg)
+##### 128 byte elements
+![decode-128-byte-elements](benchmark/decode-128-byte-elements.svg)
+##### 512 byte elements
+![decode-512-byte-elements](benchmark/decode-512-byte-elements.svg)
+ 
+####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
 
-> JMH 1.15, 1 thread, 10 warm-up & 20 measurement iterations.
+##### 8 byte elements 
+![encode-8-byte-elements](benchmark/encode-8-byte-elements.svg)
+##### 32 byte elements
+![encode-32-byte-elements](benchmark/encode-32-byte-elements.svg)
+##### 128 byte elements
+![encode-128-byte-elements](benchmark/encode-128-byte-elements.svg)
+##### 512 byte elements
+![encode-512-byte-elements](benchmark/encode-512-byte-elements.svg)

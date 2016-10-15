@@ -1,0 +1,368 @@
+[
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "JHEX_CHAR_ITERATOR"
+        },
+        "primaryMetric" : {
+            "score" : 7032847.625696093,
+            "scoreError" : 426815.217826022,
+            "scoreConfidence" : [
+                6606032.407870071,
+                7459662.843522115
+            ],
+            "scorePercentiles" : {
+                "0.0" : 6536940.558442629,
+                "50.0" : 6927978.406366447,
+                "90.0" : 7412310.397275664,
+                "95.0" : 7412603.017742788,
+                "99.0" : 7412603.017742788,
+                "99.9" : 7412603.017742788,
+                "99.99" : 7412603.017742788,
+                "99.999" : 7412603.017742788,
+                "99.9999" : 7412603.017742788,
+                "100.0" : 7412603.017742788
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    6881468.29520684,
+                    6901105.344602454,
+                    6915273.409348418,
+                    6876741.122526652,
+                    7120178.148925928,
+                    6940683.403384475,
+                    6536940.558442629,
+                    7412603.017742788,
+                    7333806.143709192,
+                    7409676.813071546
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "JHEX_TO_CHAR_ARRAY"
+        },
+        "primaryMetric" : {
+            "score" : 6570616.278619701,
+            "scoreError" : 183589.30709332033,
+            "scoreConfidence" : [
+                6387026.971526381,
+                6754205.585713021
+            ],
+            "scorePercentiles" : {
+                "0.0" : 6400217.6217563525,
+                "50.0" : 6544256.500952484,
+                "90.0" : 6821756.3942972375,
+                "95.0" : 6832499.96724195,
+                "99.0" : 6832499.96724195,
+                "99.9" : 6832499.96724195,
+                "99.99" : 6832499.96724195,
+                "99.999" : 6832499.96724195,
+                "99.9999" : 6832499.96724195,
+                "100.0" : 6832499.96724195
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    6725064.237794819,
+                    6832499.96724195,
+                    6548130.476562197,
+                    6540382.52534277,
+                    6400217.6217563525,
+                    6516749.966974426,
+                    6513100.764299899,
+                    6556057.374170005,
+                    6513140.284694734,
+                    6560819.56735986
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "JHEX_CHAR_ITERATOR_CHECKED"
+        },
+        "primaryMetric" : {
+            "score" : 7037796.153053051,
+            "scoreError" : 597720.4128274036,
+            "scoreConfidence" : [
+                6440075.740225648,
+                7635516.565880454
+            ],
+            "scorePercentiles" : {
+                "0.0" : 6401229.408577534,
+                "50.0" : 7011077.226695742,
+                "90.0" : 7513422.818165515,
+                "95.0" : 7514510.860421423,
+                "99.0" : 7514510.860421423,
+                "99.9" : 7514510.860421423,
+                "99.99" : 7514510.860421423,
+                "99.999" : 7514510.860421423,
+                "99.9999" : 7514510.860421423,
+                "100.0" : 7514510.860421423
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    7006583.531623211,
+                    6935008.166964501,
+                    6820967.339991049,
+                    7015570.921768275,
+                    7171592.7453359505,
+                    6401229.408577534,
+                    6515507.219639739,
+                    7493360.898346498,
+                    7514510.860421423,
+                    7503630.437862344
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "JHEX_TO_CHAR_ARRAY_CHECKED"
+        },
+        "primaryMetric" : {
+            "score" : 6731818.527187996,
+            "scoreError" : 136176.08840520572,
+            "scoreConfidence" : [
+                6595642.43878279,
+                6867994.6155932015
+            ],
+            "scorePercentiles" : {
+                "0.0" : 6607186.027840396,
+                "50.0" : 6713425.572810357,
+                "90.0" : 6897659.310583058,
+                "95.0" : 6904529.961481671,
+                "99.0" : 6904529.961481671,
+                "99.9" : 6904529.961481671,
+                "99.99" : 6904529.961481671,
+                "99.999" : 6904529.961481671,
+                "99.9999" : 6904529.961481671,
+                "100.0" : 6904529.961481671
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    6722142.99692465,
+                    6904529.961481671,
+                    6704708.148696066,
+                    6670380.614752268,
+                    6795400.579080388,
+                    6662009.845184203,
+                    6607186.027840396,
+                    6674959.126213242,
+                    6741044.519211517,
+                    6835823.452495544
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "COMMONS_CODEC"
+        },
+        "primaryMetric" : {
+            "score" : 4545552.649745072,
+            "scoreError" : 80209.06013623241,
+            "scoreConfidence" : [
+                4465343.58960884,
+                4625761.709881305
+            ],
+            "scorePercentiles" : {
+                "0.0" : 4496036.274079099,
+                "50.0" : 4531244.675796025,
+                "90.0" : 4627593.16937623,
+                "95.0" : 4627649.681652549,
+                "99.0" : 4627649.681652549,
+                "99.9" : 4627649.681652549,
+                "99.99" : 4627649.681652549,
+                "99.999" : 4627649.681652549,
+                "99.9999" : 4627649.681652549,
+                "100.0" : 4627649.681652549
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    4499571.814082461,
+                    4590454.290564192,
+                    4556222.054523947,
+                    4627084.558889361,
+                    4543772.511239164,
+                    4627649.681652549,
+                    4496036.274079099,
+                    4496536.050011502,
+                    4518716.840352887,
+                    4499482.422055567
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "GUAVA"
+        },
+        "primaryMetric" : {
+            "score" : 7165298.606729122,
+            "scoreError" : 595935.3984026938,
+            "scoreConfidence" : [
+                6569363.208326428,
+                7761234.005131816
+            ],
+            "scorePercentiles" : {
+                "0.0" : 6387191.47723064,
+                "50.0" : 7386169.5344881555,
+                "90.0" : 7403543.404019422,
+                "95.0" : 7403732.262135779,
+                "99.0" : 7403732.262135779,
+                "99.9" : 7403732.262135779,
+                "99.99" : 7403732.262135779,
+                "99.999" : 7403732.262135779,
+                "99.9999" : 7403732.262135779,
+                "100.0" : 7403732.262135779
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    7401185.904303586,
+                    6992708.72551557,
+                    7397983.637324181,
+                    7365382.834138883,
+                    6387191.47723064,
+                    7378649.560629204,
+                    7403732.262135779,
+                    6530618.47669406,
+                    7393689.508347107,
+                    7401843.680972207
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "benchmark" : "com.fabahaba.encode.DecodeBenchmark.run",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "warmupIterations" : 5,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 10,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "decodeType" : "JMX_DATATYPE_CONVERTER"
+        },
+        "primaryMetric" : {
+            "score" : 5386244.29916336,
+            "scoreError" : 76471.49748983757,
+            "scoreConfidence" : [
+                5309772.801673522,
+                5462715.796653198
+            ],
+            "scorePercentiles" : {
+                "0.0" : 5255500.833062895,
+                "50.0" : 5407487.354937546,
+                "90.0" : 5416883.039254437,
+                "95.0" : 5417414.74503628,
+                "99.0" : 5417414.74503628,
+                "99.9" : 5417414.74503628,
+                "99.99" : 5417414.74503628,
+                "99.999" : 5417414.74503628,
+                "99.9999" : 5417414.74503628,
+                "100.0" : 5417414.74503628
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    5411631.162300645,
+                    5406832.36764222,
+                    5408142.342232871,
+                    5343622.181211166,
+                    5411291.546899255,
+                    5417414.74503628,
+                    5412097.687217853,
+                    5255500.833062895,
+                    5401564.558613675,
+                    5394345.567416741
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    }
+]
+
+
