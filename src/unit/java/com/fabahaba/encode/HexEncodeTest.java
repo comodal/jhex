@@ -2,6 +2,8 @@ package com.fabahaba.encode;
 
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -18,8 +20,33 @@ public class HexEncodeTest {
   }
 
   @Test
+  public void decodeBytesEncodeLower() {
+    final byte[] lower = JHex.decode(TEST_HEX.getBytes(StandardCharsets.US_ASCII));
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeByteBufferEncodeLower() {
+    final byte[] lower = JHex.decode(ByteBuffer.wrap(TEST_HEX.getBytes(StandardCharsets.US_ASCII)));
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
   public void decodeCheckedEncodeLower() {
     final byte[] lower = JHex.decodeChecked(TEST_HEX);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeCheckedBytesEncodeLower() {
+    final byte[] lower = JHex.decodeChecked(TEST_HEX.getBytes(StandardCharsets.US_ASCII));
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeCheckedByteBufferEncodeLower() {
+    final byte[] lower = JHex
+        .decodeChecked(ByteBuffer.wrap(TEST_HEX.getBytes(StandardCharsets.US_ASCII)));
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -34,6 +61,20 @@ public class HexEncodeTest {
   public void decodeOffsetCheckedEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
     JHex.decodeChecked(TEST_HEX, lower, 0);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeOffsetCheckedBytesEncodeLower() {
+    final byte[] lower = new byte[TEST_HEX.length() >> 1];
+    JHex.decodeChecked(TEST_HEX.getBytes(StandardCharsets.US_ASCII), lower, 0);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeOffsetCheckedByteBufferEncodeLower() {
+    final byte[] lower = new byte[TEST_HEX.length() >> 1];
+    JHex.decodeChecked(ByteBuffer.wrap(TEST_HEX.getBytes(StandardCharsets.US_ASCII)), lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
