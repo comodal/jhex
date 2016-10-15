@@ -24,9 +24,9 @@ Each benchmark method encodes or decodes an element from an array of 8388608 ran
 
 ####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
 
-* JHEX_CHAR_ITERATOR: Uses Java 9 primitive int operator, String#chars().  Does not validate encoding.
+* JHEX_CHAR_ITERATOR: Uses the Java 9 primitive int iterator, String#chars().  Does not validate encoding.
 * JHEX_TO_CHAR_ARRAY: Uses String#toCharArray().  Does not validate encoding.
-* JHEX_CHAR_ITERATOR_CHECKED: Uses Java 9 primitive int operator, String#chars().  Validates encoding.
+* JHEX_CHAR_ITERATOR_CHECKED: Uses the Java 9 primitive int iterator, String#chars().  Validates encoding.
 * JHEX_TO_CHAR_ARRAY_CHECKED: Uses String#toCharArray().  Validates encoding.
 
 ##### 8 byte elements
