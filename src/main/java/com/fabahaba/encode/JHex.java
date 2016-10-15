@@ -371,6 +371,9 @@ public final class JHex {
 
   public static byte[] decode(final char[] chars) {
     final byte[] data = new byte[chars.length >> 1];
+    if (data.length == 0) {
+      return data;
+    }
     for (int i = 0, c = 0;;++c) {
       data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
       if (i == data.length) {
@@ -381,6 +384,9 @@ public final class JHex {
 
   public static byte[] decode(final byte[] chars) {
     final byte[] data = new byte[chars.length >> 1];
+    if (data.length == 0) {
+      return data;
+    }
     for (int i = 0, c = 0;;++c) {
       data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
       if (i == data.length) {
@@ -391,6 +397,9 @@ public final class JHex {
 
   public static byte[] decode(final ByteBuffer chars) {
     final byte[] data = new byte[chars.limit() >> 1];
+    if (data.length == 0) {
+      return data;
+    }
     int index = 0;
     do {
       data[index++] = (byte) (DIGITS[chars.get()] << 4 | DIGITS[chars.get()]);
@@ -487,11 +496,8 @@ public final class JHex {
   }
 
   public static void decode(final char[] chars, final byte[] out, int offset) {
-    for (int c = 0;;++offset) {
-      out[offset] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
-      if (c == chars.length) {
-        return;
-      }
+    for (int c = 0;c < chars.length;) {
+      out[offset++] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
     }
   }
 
@@ -575,6 +581,9 @@ public final class JHex {
 
   public static byte[] decodePrimIter(final CharSequence hex) {
     final byte[] data = new byte[hex.length() >> 1];
+    if (data.length == 0) {
+      return data;
+    }
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     int index = 0;
     do {
@@ -611,9 +620,9 @@ public final class JHex {
   public static void decodePrimIter(final CharSequence hex, final byte[] out, int offset) {
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     final int max = offset + (hex.length() >> 1);
-    do {
+    while (offset < max) {
       out[offset++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
-    } while (offset < max);
+    }
   }
 
   public static void decodePrimIterChecked(final CharSequence hex, final byte[] out, int offset) {
