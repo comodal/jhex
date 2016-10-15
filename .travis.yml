@@ -30,6 +30,5 @@ script: if [ ! -z "$TRAVIS_TAG" ] || [[ "$COMMIT_MSG" != 'Release jhex'* ]] ; th
 
 after_success:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then ./gradlew bintrayUpload; fi
-  - ./gradlew jacocoTestReport
   - ./gradlew junitPlatformJacocoReport
   - bash <(curl -s https://codecov.io/bash)
