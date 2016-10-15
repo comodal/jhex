@@ -159,17 +159,17 @@ bintrayUpload.onlyIf { !project.version.endsWith('SNAPSHOT') }
 //  }
 //}
 
-jacoco {
-  toolVersion = "+"
-  reportsDir = file("$buildDir/customJacocoReportDir")
-}
-
-jacocoTestReport {
-  reports {
-    xml.enabled = true
-    html.enabled = false
-  }
-}
+//jacoco {
+//  toolVersion = "+"
+//  reportsDir = file("$buildDir/customJacocoReportDir")
+//}
+//
+//jacocoTestReport {
+//  reports {
+//    xml.enabled = true
+//    html.enabled = false
+//  }
+//}
 
 project.afterEvaluate {
   def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
@@ -182,18 +182,15 @@ project.afterEvaluate {
     applyTo junitPlatformTestTask
   }
 
-  jacocoTestReport {
-    reports {
-      xml.enabled = true
-      html.enabled = false
-    }
-  }
-
   // create junit platform jacoco task
   project.task(type: JacocoReport, "junitPlatformJacocoReport",
           {
             sourceDirectories = files("./src/main")
             classDirectories = files("$buildDir/classes/main")
+            reports {
+              xml.enabled = true
+              html.enabled = false
+            }
             executionData junitPlatformTestTask
           })
 }
