@@ -71,7 +71,7 @@ test {
   if (project.hasProperty('excludeTests')) {
     exclude project.excludeTests
   }
-  maxParallelForks = 2
+  maxParallelForks = 4
   testLogging {
     events "passed", "skipped", "failed", "standardOut", "standardError"
   }

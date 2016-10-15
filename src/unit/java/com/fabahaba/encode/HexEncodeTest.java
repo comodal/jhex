@@ -3,10 +3,13 @@ package com.fabahaba.encode;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+import static java.nio.charset.StandardCharsets.US_ASCII;
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HexEncodeTest {
 
@@ -21,13 +24,13 @@ public class HexEncodeTest {
 
   @Test
   public void decodeBytesEncodeLower() {
-    final byte[] lower = JHex.decode(TEST_HEX.getBytes(StandardCharsets.US_ASCII));
+    final byte[] lower = JHex.decode(TEST_HEX.getBytes(US_ASCII));
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
   @Test
   public void decodeByteBufferEncodeLower() {
-    final byte[] lower = JHex.decode(ByteBuffer.wrap(TEST_HEX.getBytes(StandardCharsets.US_ASCII)));
+    final byte[] lower = JHex.decode(ByteBuffer.wrap(TEST_HEX.getBytes(US_ASCII)));
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -39,14 +42,14 @@ public class HexEncodeTest {
 
   @Test
   public void decodeCheckedBytesEncodeLower() {
-    final byte[] lower = JHex.decodeChecked(TEST_HEX.getBytes(StandardCharsets.US_ASCII));
+    final byte[] lower = JHex.decodeChecked(TEST_HEX.getBytes(US_ASCII));
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
   @Test
   public void decodeCheckedByteBufferEncodeLower() {
     final byte[] lower = JHex
-        .decodeChecked(ByteBuffer.wrap(TEST_HEX.getBytes(StandardCharsets.US_ASCII)));
+        .decodeChecked(ByteBuffer.wrap(TEST_HEX.getBytes(US_ASCII)));
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -67,14 +70,14 @@ public class HexEncodeTest {
   @Test
   public void decodeOffsetCheckedBytesEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
-    JHex.decodeChecked(TEST_HEX.getBytes(StandardCharsets.US_ASCII), lower, 0);
+    JHex.decodeChecked(TEST_HEX.getBytes(US_ASCII), lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
   @Test
   public void decodeOffsetCheckedByteBufferEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
-    JHex.decodeChecked(ByteBuffer.wrap(TEST_HEX.getBytes(StandardCharsets.US_ASCII)), lower, 0);
+    JHex.decodeChecked(ByteBuffer.wrap(TEST_HEX.getBytes(US_ASCII)), lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -82,6 +85,80 @@ public class HexEncodeTest {
   public void decodeEncodeLowerOffset() {
     final byte[] lower = JHex.decode(TEST_HEX);
     assertEquals(TEST_HEX, JHex.encode(lower, 0, lower.length));
+  }
+
+  @Test
+  public void decodeEncodeUpperOffset() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertEquals(TEST_HEX.toUpperCase(Locale.ENGLISH),
+        JHex.encodeUpper(lower, 0, lower.length));
+  }
+
+  @Test
+  public void decodeEncodeLowerOffsetChars() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.toCharArray(), JHex.encodeChars(lower, 0, lower.length));
+  }
+
+  @Test
+  public void decodeEncodeOffsetUpperChars() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).toCharArray(),
+        JHex.encodeUpperChars(lower, 0, lower.length));
+  }
+
+  @Test
+  public void decodeEncodeLowerOffsetBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.getBytes(US_ASCII), JHex.encodeBytes(lower, 0, lower.length));
+  }
+
+  @Test
+  public void decodeEncodeOffsetUpperBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).getBytes(US_ASCII),
+        JHex.encodeUpperBytes(lower, 0, lower.length));
+  }
+
+  @Test
+  public void decodeEncodeLowerByteBufferFixedLength() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertEquals(TEST_HEX, JHex.encode(ByteBuffer.wrap(lower), lower.length));
+  }
+
+  @Test
+  public void decodeEncodeUpperByteBufferFixedLength() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertEquals(TEST_HEX.toUpperCase(Locale.ENGLISH),
+        JHex.encodeUpper(ByteBuffer.wrap(lower), lower.length));
+  }
+
+  @Test
+  public void decodeEncodeCharsLowerByteBufferFixedLength() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.toCharArray(),
+        JHex.encodeChars(ByteBuffer.wrap(lower), lower.length));
+  }
+
+  @Test
+  public void decodeEncodeUpperCharsByteBufferFixedLength() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).toCharArray(),
+        JHex.encodeUpperChars(ByteBuffer.wrap(lower), lower.length));
+  }
+
+  @Test
+  public void decodeEncodeBytesLowerByteBufferFixedLength() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.getBytes(US_ASCII),
+        JHex.encodeBytes(ByteBuffer.wrap(lower), lower.length));
+  }
+
+  @Test
+  public void decodeEncodeUpperBytesByteBufferFixedLength() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    assertArrayEquals(TEST_HEX.toUpperCase(Locale.ENGLISH).getBytes(US_ASCII),
+        JHex.encodeUpperBytes(ByteBuffer.wrap(lower), lower.length));
   }
 
   @Test
@@ -99,6 +176,24 @@ public class HexEncodeTest {
     final byte[] upper = JHex.decode(upperHex);
     assertEquals(TEST_HEX, JHex.encode(upper));
     assertEquals(upperHex, JHex.encodeUpper(upper));
+  }
+
+  @Test
+  public void decodeEncodeUpperBytes() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] upperHex = TEST_HEX.toUpperCase(Locale.ENGLISH).getBytes(US_ASCII);
+    assertArrayEquals(upperHex, JHex.encodeUpperBytes(lower));
+    final byte[] upper = JHex.decode(upperHex);
+    assertArrayEquals(upperHex, JHex.encodeUpperBytes(upper));
+  }
+
+  @Test
+  public void decodeEncodeUpperByteBuffer() {
+    final byte[] lower = JHex.decode(TEST_HEX);
+    final byte[] upperHex = TEST_HEX.toUpperCase(Locale.ENGLISH).getBytes(US_ASCII);
+    assertArrayEquals(upperHex, JHex.encodeUpperBytes(ByteBuffer.wrap(lower)));
+    final byte[] upper = JHex.decode(upperHex);
+    assertArrayEquals(upperHex, JHex.encodeUpperBytes(ByteBuffer.wrap(upper)));
   }
 
   @Test
@@ -155,5 +250,28 @@ public class HexEncodeTest {
       bytes[i++] = data[--offset];
     }
     return bytes;
+  }
+
+  @Test
+  public void testLengthUtil() {
+    assertTrue(JHex.isLengthValid("42"));
+    assertTrue(JHex.isLengthValid(""));
+    assertTrue(JHex.isLengthValid("!!"));
+
+    assertFalse(JHex.isLengthValid("421"));
+    assertFalse(JHex.isLengthValid(null));
+  }
+
+  @Test
+  public void testIsValidUtil() {
+    assertTrue(JHex.isValid("42"));
+    assertTrue(JHex.isValid(""));
+
+    assertFalse(JHex.isValid("!!"));
+    assertFalse(JHex.isValid("4!"));
+    assertFalse(JHex.isValid("!2"));
+    assertFalse(JHex.isValid("421"));
+    assertFalse(JHex.isValid("42!"));
+    assertFalse(JHex.isValid(null));
   }
 }
