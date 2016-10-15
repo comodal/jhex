@@ -90,6 +90,19 @@ public class HexEncodeTest {
     assertEquals(upperHex, JHex.encodeUpper(upper));
   }
 
+  @Test
+  public void decodePrimIterCheckedOffsetEncodeLower() {
+    final byte[] lower = new byte[TEST_HEX.length() >> 1];
+    JHex.decodePrimIterChecked(TEST_HEX, lower, 0);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodePrimIterCheckedEncodeLower() {
+    final byte[] lower = JHex.decodePrimIterChecked(TEST_HEX);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
   static byte[] copyReverse(final byte[] data) {
     return copyReverse(data, 0, data.length);
   }

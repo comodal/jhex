@@ -563,10 +563,11 @@ public final class JHex {
       int bite = DIGITS[chr] << 4;
       chr = buffer.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw new IllegalStateException(formatExMsg(c));
+        throw new IllegalStateException(formatExMsg(++c));
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
-      if (++c == len) {
+      c += 2;
+      if (c == len) {
         return;
       }
     }
@@ -582,11 +583,59 @@ public final class JHex {
     return data;
   }
 
+  public static byte[] decodePrimIterChecked(final CharSequence hex) {
+    final int len = hex.length();
+    if (len == 0) {
+      return new byte[0];
+    }
+    if ((len & 1) != 0) {
+      throw new IllegalStateException("Hex encoding must have an even length.");
+    }
+    final byte[] data = new byte[len >> 1];
+    final PrimitiveIterator.OfInt chars = hex.chars().iterator();
+    for (int index = 0;index < data.length;) {
+      int chr = chars.nextInt();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(index * 2));
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars.nextInt();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg((index * 2) + 1));
+      }
+      data[index++] = (byte) (bite | DIGITS[chr]);
+    }
+    return data;
+  }
+
   public static void decodePrimIter(final CharSequence hex, final byte[] out, int offset) {
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     final int max = offset + (hex.length() >> 1);
     do {
       out[offset++] = (byte) (DIGITS[chars.nextInt()] << 4 | DIGITS[chars.nextInt()]);
     } while (offset < max);
+  }
+
+  public static void decodePrimIterChecked(final CharSequence hex, final byte[] out, int offset) {
+    final int len = hex.length();
+    if (len == 0) {
+      return;
+    }
+    if ((len & 1) != 0) {
+      throw new IllegalStateException("Hex encoding must have an even length.");
+    }
+    final PrimitiveIterator.OfInt chars = hex.chars().iterator();
+    for (int index = 0;chars.hasNext();index += 2) {
+      int chr = chars.nextInt();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(index));
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars.nextInt();
+      if (chr >= DIGITS.length || DIGITS[chr] == -1) {
+        throw new IllegalStateException(formatExMsg(index + 1));
+      }
+      out[offset++] = (byte) (bite | DIGITS[chr]);
+    }
   }
 }
