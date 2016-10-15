@@ -8,6 +8,7 @@ import java.util.function.Function;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GuavaTests {
 
@@ -60,28 +61,38 @@ public class GuavaTests {
     assertArrayEquals(decoded.getBytes(UTF_8), decoder.apply(encoded));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testBase16InvalidDecodingNewlines() {
-    JHex.decodeChecked("\n\n");
+    assertEquals("Invalid character '\n' for hex encoding at position 0.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("EFGH")).getMessage());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testBase16InvalidDecodingG() {
-    JHex.decodeChecked("EFGH");
+    assertEquals("Invalid character 'G' for hex encoding at position 2.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("EFGH")).getMessage());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testBase16ValidDecodingOddLength1() {
-    JHex.decodeChecked("A");
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("A")).getMessage());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testBase16ValidDecodingOddLength3() {
-    JHex.decodeChecked("ABC");
+    assertEquals("Invalid hex encoding length of 3.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("ABC")).getMessage());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testBase16InvalidDecodingOddLength1() {
-    JHex.decodeChecked("?");
+    assertEquals("Invalid hex encoding length of 1.",
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked("?")).getMessage());
   }
 }
