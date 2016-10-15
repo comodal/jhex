@@ -163,23 +163,21 @@ project.afterEvaluate {
   def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
 
   jacoco {
-    // this tool version is compatible with
     toolVersion = "+"
     reportsDir = file("$buildDir/jacocoReports")
     applyTo junitPlatformTestTask
   }
 
-  project.task(type: JacocoReport, "junitPlatformJacocoReport",
-    {
-      sourceDirectories = files("./src/main")
-      classDirectories = files("$buildDir/classes/main")
-      reports {
-        xml.enabled = true
-        html.enabled = false
-        xml.destination "${buildDir}/jacocoReports/test/jacocoTestReport.xml"
-      }
-      executionData junitPlatformTestTask
-    })
+  project.task(type: JacocoReport, "junitPlatformJacocoReport", {
+    sourceDirectories = files("./src/main")
+    classDirectories = files("$buildDir/classes/main")
+    reports {
+      xml.enabled = true
+      html.enabled = false
+      xml.destination "${buildDir}/jacocoReports/test/jacocoTestReport.xml"
+    }
+    executionData junitPlatformTestTask
+  })
 }
 
 checkstyle {
