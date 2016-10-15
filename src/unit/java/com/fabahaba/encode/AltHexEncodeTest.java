@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import static com.fabahaba.encode.HexEncodeTest.TEST_HEX;
 import static com.fabahaba.encode.HexEncodeTest.copyReverse;
+import static com.fabahaba.encode.HexEncodeTest.testPrivateCtor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AltHexEncodeTest {
@@ -52,5 +53,10 @@ public class AltHexEncodeTest {
     final byte[] upper = JHex.decode(upperHex);
     assertEquals(TEST_HEX, JHexAlt.encode(upper));
     assertEquals(upperHex, JHexAlt.encodeUpper(upper));
+  }
+
+  @Test
+  public void testConstructorIsPrivate() {
+    testPrivateCtor(JHexAlt.class);
   }
 }

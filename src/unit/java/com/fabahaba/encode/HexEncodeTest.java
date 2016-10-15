@@ -2,6 +2,9 @@ package com.fabahaba.encode;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 
@@ -322,6 +325,21 @@ public class HexEncodeTest {
   }
 
   @Test
+  public void encodeEmpty() {
+    assertArrayEquals(new byte[0], JHex.encodeBytes(new byte[0], 0, 0));
+    assertArrayEquals(new char[0], JHex.encodeReverseChars(new byte[0], 0, 0));
+    assertArrayEquals(new char[0], JHex.encodeUpperReverseChars(new byte[0], 0, 0));
+    assertArrayEquals(new char[0], JHex.encodeReverseChars(ByteBuffer.wrap(new byte[0]), 0, 0));
+    assertArrayEquals(new char[0],
+        JHex.encodeUpperReverseChars(ByteBuffer.wrap(new byte[0]), 0, 0));
+    assertArrayEquals(new byte[0], JHex.encodeReverseBytes(new byte[0], 0, 0));
+    assertArrayEquals(new byte[0], JHex.encodeUpperReverseBytes(new byte[0], 0, 0));
+    assertArrayEquals(new byte[0], JHex.encodeReverseBytes(ByteBuffer.wrap(new byte[0]), 0, 0));
+    assertArrayEquals(new byte[0],
+        JHex.encodeUpperReverseBytes(ByteBuffer.wrap(new byte[0]), 0, 0));
+  }
+
+  @Test
   public void decodeEmpty() {
     assertArrayEquals(new byte[0], JHex.decode(new byte[0]));
     assertArrayEquals(new byte[0], JHex.decode(new char[0]));
@@ -438,5 +456,22 @@ public class HexEncodeTest {
     assertFalse(JHex.isValid("q2"));
     assertFalse(JHex.isValid("42q"));
     assertFalse(JHex.isValid(null));
+  }
+
+  @Test
+  public void testConstructorIsPrivate() {
+    testPrivateCtor(JHex.class);
+  }
+
+  static void testPrivateCtor(final Class<?> clas) {
+    try {
+      Constructor<?> constructor = clas.getDeclaredConstructor();
+      assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+      constructor.setAccessible(true);
+      constructor.newInstance();
+    } catch (NoSuchMethodException | IllegalAccessException
+        | InvocationTargetException | InstantiationException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
