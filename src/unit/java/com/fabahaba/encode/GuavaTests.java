@@ -1,13 +1,13 @@
 package com.fabahaba.encode;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 import java.util.function.Function;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GuavaTests {
@@ -65,7 +65,7 @@ public class GuavaTests {
   public void testBase16InvalidDecodingNewlines() {
     assertEquals("Invalid character '\n' for hex encoding at position 0.",
         assertThrows(IllegalArgumentException.class,
-            () -> JHex.decodeChecked("EFGH")).getMessage());
+            () -> JHex.decodeChecked("\n\n")).getMessage());
   }
 
   @Test

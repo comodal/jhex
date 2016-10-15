@@ -1,8 +1,13 @@
 buildscript {
   repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     jcenter()
   }
+  dependencies {
+    classpath 'org.junit.platform:junit-platform-gradle-plugin:+'
+  }
 }
+
 plugins {
   id 'java'
   id 'pl.allegro.tech.build.axion-release' version '1.4.1'
@@ -11,7 +16,10 @@ plugins {
   id 'checkstyle'
   id 'me.champeau.gradle.jmh' version '0.3.1'
   id 'jacoco'
+  // id 'findbugs' // Waiting for Java 9 support in findbugs 3.1.+
 }
+
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 scmVersion {
   tag {
@@ -44,11 +52,22 @@ repositories {
 dependencies {
   testCompile 'org.junit.platform:junit-platform-runner:+'
   testCompile 'org.junit.jupiter:junit-jupiter-api:+'
-  testCompile 'org.junit.jupiter:junit-jupiter-engine:+'
+  testRuntime 'org.junit.jupiter:junit-jupiter-engine:+'
 
   jmh 'commons-codec:commons-codec:+'
   jmh 'com.google.guava:guava:+'
   jmh 'javax.xml.bind:jaxb-api:+'
+}
+
+junitPlatform {
+  platformVersion '+'
+}
+
+test {
+  maxParallelForks = 4
+  testLogging {
+    events "passed", "skipped", "failed", "standardOut", "standardError"
+  }
 }
 
 jmh {
@@ -67,16 +86,6 @@ jmh {
   forceGC = true
   // [cl, comp, gc, stack, perf, perfnorm, perfasm, xperf, xperfasm, hs_cl, hs_comp, hs_gc, hs_rt, hs_thr]
   profilers = []
-}
-
-test {
-  if (project.hasProperty('excludeTests')) {
-    exclude project.excludeTests
-  }
-  maxParallelForks = 4
-  testLogging {
-    events "passed", "skipped", "failed", "standardOut", "standardError"
-  }
 }
 
 sourceSets {
@@ -116,7 +125,7 @@ bintray {
   pkg {
     repo = 'libs'
     name = project.name
-    desc = 'Java 9 Cache'
+    desc = 'Just Hex (En|De)coding for Java'
     websiteUrl = 'https://github.com/jamespedwards42/' + project.name
     vcsUrl = 'https://github.com/jamespedwards42/' + project.name
     issueTrackerUrl = 'https://github.com/jamespedwards42/' + project.name + '/issues'
@@ -135,14 +144,12 @@ bintray {
 
 bintrayUpload.onlyIf { !project.version.endsWith('SNAPSHOT') }
 
-// does not support Java 9 yet.
 //findbugs {
-//  toolVersion = "+"
+//  toolVersion = "3.1.+"
 //  reportsDir = file("$project.buildDir/findbugsReports")
 //  effort = "max"
 //  reportLevel = "low"
 //  ignoreFailures = false
-//  excludeFilter = file("findbugs-exclude.xml")
 //}
 //
 //tasks.withType(FindBugs) {

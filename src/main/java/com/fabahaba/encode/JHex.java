@@ -483,15 +483,15 @@ public final class JHex {
       throw createIllegalLengthException(len);
     }
     final byte[] data = new byte[len >> 1];
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0;;) {
       byte chr = chars.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw createIllegalCharException(chr, c);
+        throw createIllegalCharException(chr, i * 2);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.get();
       if (chr >= DIGITS.length || DIGITS[chr] == -1) {
-        throw createIllegalCharException(chr, c);
+        throw createIllegalCharException(chr, (i * 2) + 1);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
       if (i == data.length) {

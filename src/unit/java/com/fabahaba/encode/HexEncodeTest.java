@@ -1,15 +1,17 @@
 package com.fabahaba.encode;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.util.Locale;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HexEncodeTest {
 
@@ -206,7 +208,6 @@ public class HexEncodeTest {
         JHex.encodeUpperReverseChars(reverse, 31, 32));
   }
 
-
   @Test
   public void encodeByteBufferReverse() {
     final byte[] lower = JHex.decode(TEST_HEX);
@@ -321,6 +322,113 @@ public class HexEncodeTest {
   }
 
   @Test
+  public void decodeCheckedEmptyString() {
+    assertArrayEquals(new byte[0], JHex.decode(new byte[0]));
+    assertArrayEquals(new byte[0], JHex.decode(new char[0]));
+    assertArrayEquals(new byte[0], JHex.decode(ByteBuffer.wrap(new byte[0])));
+    assertArrayEquals(new byte[0], JHex.decodeChecked(new char[0]));
+    assertArrayEquals(new byte[0], JHex.decodeChecked(new byte[0]));
+    assertArrayEquals(new byte[0], JHex.decodeChecked(ByteBuffer.wrap(new byte[0])));
+    final byte[] empty = new byte[4];
+    JHex.decodePrimIterChecked("", empty, 0);
+    assertArrayEquals(new byte[4], empty);
+    assertArrayEquals(new byte[0], JHex.decodePrimIterChecked(""));
+  }
+
+  @Test
+  public void decodeCheckedOddLength() {
+    final String oddLength = "1";
+    final String expectedMsg = "Invalid hex encoding length of 1.";
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(oddLength.toCharArray())).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(oddLength.toCharArray(), new byte[0], 0)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(oddLength.getBytes(UTF_8))).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(oddLength.getBytes(UTF_8), new byte[0], 0)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(ByteBuffer.wrap(oddLength.getBytes(UTF_8)))).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(ByteBuffer.wrap(oddLength.getBytes(UTF_8)), new byte[0], 0))
+            .getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodePrimIterChecked(oddLength)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodePrimIterChecked(oddLength, new byte[0], 0)).getMessage());
+  }
+
+  @Test
+  public void decodeCheckedBadCharEven() {
+    final String badEven = "12!3";
+    final String expectedMsg = "Invalid character '!' for hex encoding at position 2.";
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badEven.toCharArray())).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badEven.toCharArray(), new byte[2], 0)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badEven.getBytes(UTF_8))).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badEven.getBytes(UTF_8), new byte[2], 0)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(ByteBuffer.wrap(badEven.getBytes(UTF_8)))).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(ByteBuffer.wrap(badEven.getBytes(UTF_8)), new byte[2], 0))
+            .getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodePrimIterChecked(badEven)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodePrimIterChecked(badEven, new byte[2], 0)).getMessage());
+  }
+
+  @Test
+  public void decodeCheckedBadCharOdd() {
+    final String badOdd = "123!";
+    final String expectedMsg = "Invalid character '!' for hex encoding at position 3.";
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badOdd.toCharArray())).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badOdd.toCharArray(), new byte[2], 0)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badOdd.getBytes(UTF_8))).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(badOdd.getBytes(UTF_8), new byte[2], 0)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(ByteBuffer.wrap(badOdd.getBytes(UTF_8)))).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodeChecked(ByteBuffer.wrap(badOdd.getBytes(UTF_8)), new byte[2], 0))
+            .getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodePrimIterChecked(badOdd)).getMessage());
+    assertEquals(expectedMsg,
+        assertThrows(IllegalArgumentException.class,
+            () -> JHex.decodePrimIterChecked(badOdd, new byte[2], 0)).getMessage());
+  }
+
+  @Test
   public void decodePrimIterCheckedEncodeLower() {
     final byte[] lower = JHex.decodePrimIterChecked(TEST_HEX);
     assertEquals(TEST_HEX, JHex.encode(lower));
@@ -359,6 +467,11 @@ public class HexEncodeTest {
     assertFalse(JHex.isValid("!2"));
     assertFalse(JHex.isValid("421"));
     assertFalse(JHex.isValid("42!"));
+
+    assertFalse(JHex.isValid("qq"));
+    assertFalse(JHex.isValid("4q"));
+    assertFalse(JHex.isValid("q2"));
+    assertFalse(JHex.isValid("42q"));
     assertFalse(JHex.isValid(null));
   }
 }
