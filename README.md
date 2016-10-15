@@ -21,21 +21,21 @@ Each benchmark method encodes or decodes an element from an array of 8388608 ran
 ####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
 
 ##### 8 byte elements
-![decode-8-byte-elements](benchmark/decode-8-byte-elements.svg)
+![decode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
 ##### 32 byte elements
-![decode-32-byte-elements](benchmark/decode-32-byte-elements.svg)
+![decode-32-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-32-byte-elements.svg)
 ##### 128 byte elements
-![decode-128-byte-elements](benchmark/decode-128-byte-elements.svg)
+![decode-128-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-128-byte-elements.svg)
 ##### 512 byte elements
-![decode-512-byte-elements](benchmark/decode-512-byte-elements.svg)
+![decode-512-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-512-byte-elements.svg)
  
 ####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
 
 ##### 8 byte elements 
-![encode-8-byte-elements](benchmark/encode-8-byte-elements.svg)
+![encode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-8-byte-elements.svg)
 ##### 32 byte elements
-![encode-32-byte-elements](benchmark/encode-32-byte-elements.svg)
+![encode-32-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-32-byte-elements.svg)
 ##### 128 byte elements
-![encode-128-byte-elements](benchmark/encode-128-byte-elements.svg)
+![encode-128-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-128-byte-elements.svg)
 ##### 512 byte elements
-![encode-512-byte-elements](benchmark/encode-512-byte-elements.svg)
+![encode-512-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-512-byte-elements.svg)
