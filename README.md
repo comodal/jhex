@@ -10,6 +10,18 @@ String reEncoded = JHex.encode(decoded);
 // reEncoded.equals(hexString) == true ... promise.
 ```
 
+###Hello Worlds
+
+I'm using this project to try out tool integration with Java 9 and some other new things.
+
+- [x] Gradle JMH plugin.
+- [x] Java 9 Primitive Iterator performance.
+- [x] JUnit 5 with Java 9 & Gradle.
+- [x] JUnit 5 & Jacoco & codecov.io integration.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
+- [x] JDK 9 on Travis CI.
+- [ ] Gradle findbugs plugin.  Waiting on version 3.1.
+
+
 ###Benchmarks
 ######Environment
 * Intel® Xeon(R) CPU E5-2687W v3 @ 3.10GHz × 20 / 128GB Memory / Ubuntu 16.04
