@@ -22,7 +22,8 @@ public final class JHex {
   static final byte[] UPPER_BYTES = new byte[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       'A', 'B', 'C', 'D', 'E', 'F'};
 
-  static final int[] DIGITS = new int[103];
+  private static final int MAX_CHAR = 'f';
+  private static final int[] DIGITS = new int[MAX_CHAR + 1];
 
   static {
     Arrays.fill(DIGITS, INVALID);
@@ -364,11 +365,11 @@ public final class JHex {
     int index = 0;
     do {
       char chr = hex.charAt(index++);
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         return false;
       }
       chr = hex.charAt(index++);
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         return false;
       }
     } while (index < len);
@@ -445,12 +446,12 @@ public final class JHex {
     final byte[] data = new byte[len >> 1];
     for (int i = 0, c = 0;;++c) {
       char chr = chars.charAt(c);
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.charAt(++c);
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
@@ -474,12 +475,12 @@ public final class JHex {
     final byte[] data = new byte[chars.length >> 1];
     for (int i = 0, c = 0;;++c) {
       char chr = chars[c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
@@ -499,12 +500,12 @@ public final class JHex {
     final byte[] data = new byte[chars.length >> 1];
     for (int i = 0, c = 0;;++c) {
       byte chr = chars[c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
@@ -525,12 +526,12 @@ public final class JHex {
     final byte[] data = new byte[len >> 1];
     for (int i = 0;;) {
       byte chr = chars.get();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, i * 2);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.get();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, (i * 2) + 1);
       }
       data[i++] = (byte) (bite | DIGITS[chr]);
@@ -566,12 +567,12 @@ public final class JHex {
     }
     for (int c = 0;;++offset) {
       char chr = chars.charAt(c);
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.charAt(++c);
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
@@ -594,12 +595,12 @@ public final class JHex {
     }
     for (int c = 0;;++offset) {
       char chr = chars[c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
@@ -618,12 +619,12 @@ public final class JHex {
     }
     for (int c = 0;;++offset) {
       byte chr = chars[c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars[++c];
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
@@ -643,12 +644,12 @@ public final class JHex {
     }
     for (int c = 0;;++offset) {
       byte chr = buffer.get();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
       }
       int bite = DIGITS[chr] << 4;
       chr = buffer.get();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, ++c);
       }
       out[offset] = (byte) (bite | DIGITS[chr]);
@@ -684,12 +685,12 @@ public final class JHex {
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     for (int index = 0;index < data.length;) {
       int chr = chars.nextInt();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException((char) chr, index * 2);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.nextInt();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException((char) chr, (index * 2) + 1);
       }
       data[index++] = (byte) (bite | DIGITS[chr]);
@@ -716,12 +717,12 @@ public final class JHex {
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
     for (int index = 0;chars.hasNext();index += 2) {
       int chr = chars.nextInt();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException((char) chr, index);
       }
       int bite = DIGITS[chr] << 4;
       chr = chars.nextInt();
-      if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException((char) chr, index + 1);
       }
       out[offset++] = (byte) (bite | DIGITS[chr]);
