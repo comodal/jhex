@@ -17,7 +17,7 @@ I'm using this project to try out tool integrations with Java 9 and some other n
 - [x] [Gradle JMH plugin](https://github.com/melix/jmh-gradle-plugin).
 - [x] String chars().iterator() vs. toCharArray() vs. charAt(int) performance comparison.
 - [x] JUnit 5 with Java 9 & Gradle.
-- [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & codecov.io.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
+- [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & [codecov.io](https://codecov.io).  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
 - [x] JDK 9 on Travis CI.
 - [ ] Gradle findbugs plugin... pending release of version 3.1.
 - [ ] Jigsaw module build with Gradle... pending gradle support.
@@ -48,7 +48,7 @@ Actual result numbers can be found under [./benchmark](benchmark)
 * JHEX_TO_CHAR_ARRAY: Uses `char[] String#toCharArray()`
 * JHEX_CHAR_ITERATOR: Uses `PrimitiveIterator.OfInt String#chars().iterator()`.  Corresponds to `JHex.decodePrimIter()`.
 * JHEX_CHAR_AT: Uses `char String#chartAt(int)`.  Corresponds to `JHex.decode()`.
-* \*_CHECKED: Validates encoding and length to match functionality of other libraries. Corresponds to `JHex.\*Checked()` methods.
+* \*_CHECKED: Validates encoding and length to match functionality of other libraries. Corresponds to `JHex.*Checked()` methods.
 
 ##### 8-byte elements
 ![decode-8-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
