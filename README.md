@@ -42,9 +42,9 @@ Actual result numbers can be found under [./benchmark](benchmark)
 ####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
 
 * JHEX_TO_CHAR_ARRAY: Uses `char[] String#toCharArray()`
-* JHEX_CHAR_ITERATOR: Uses `PrimitiveIterator.OfInt String#chars().iterator()`
-* JHEX_CHAR_AT: Uses `char String#chartAt(int)`
-* *_CHECKED: Validates encoding and length to match functionality of other libraries.
+* JHEX_CHAR_ITERATOR: Uses `PrimitiveIterator.OfInt String#chars().iterator()`.  Corresponds to `JHex.decodePrimIter()`.
+* JHEX_CHAR_AT: Uses `char String#chartAt(int)`.  Corresponds to `JHex.decode()`.
+* *_CHECKED: Validates encoding and length to match functionality of other libraries. Corresponds to `JHex.*Checked()` methods.
 
 ##### 8 byte elements
 ![decode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
