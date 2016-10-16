@@ -50,13 +50,13 @@ Actual result numbers can be found under [./benchmark](benchmark)
 * JHEX_CHAR_AT: Uses `char String#chartAt(int)`.  Corresponds to `JHex.decode()`.
 * *_CHECKED: Validates encoding and length to match functionality of other libraries. Corresponds to `JHex.*Checked()` methods.
 
-##### 8 byte elements
+##### 8-byte elements
 ![decode-8-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
-##### 32 byte elements
+##### 32-byte elements
 ![decode-32-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-32-byte-elements.svg)
-##### 128 byte elements
+##### 128-byte elements
 ![decode-128-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-128-byte-elements.svg)
-##### 512 byte elements
+##### 512-byte elements
 ![decode-512-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-512-byte-elements.svg)
  
 ####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
@@ -68,11 +68,11 @@ Actual result numbers can be found under [./benchmark](benchmark)
 * JHEX_REVERSE: Allows the user to encode by traversing the given data in reverse.
 * JHEX: Very similar to Apache Commons Codec implementation.  Uses the Java String char[] constructor.
 
-##### 8 byte elements 
+##### 8-byte elements 
 ![encode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-8-byte-elements.svg)
-##### 32 byte elements
+##### 32-byte elements
 ![encode-32-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-32-byte-elements.svg)
-##### 128 byte elements
+##### 128-byte elements
 ![encode-128-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-128-byte-elements.svg)
-##### 512 byte elements
+##### 512-byte elements
 ![encode-512-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-512-byte-elements.svg)
