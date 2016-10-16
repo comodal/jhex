@@ -21,6 +21,8 @@ I'm using this project to try out tool integrations with Java 9 and some other n
 - [x] JDK 9 on Travis CI.
 - [ ] Gradle findbugs plugin... pending release of version 3.1.
 - [ ] Jigsaw module build with Gradle... pending gradle support.
+- [ ] Multiple release targets for JDK 7, 8 and 9.
+- [ ] Kotlin build script.
 
 
 ###Benchmarks
@@ -49,13 +51,13 @@ Actual result numbers can be found under [./benchmark](benchmark)
 * *_CHECKED: Validates encoding and length to match functionality of other libraries. Corresponds to `JHex.*Checked()` methods.
 
 ##### 8 byte elements
-![decode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
+![decode-8-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
 ##### 32 byte elements
-![decode-32-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-32-byte-elements.svg)
+![decode-32-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-32-byte-elements.svg)
 ##### 128 byte elements
-![decode-128-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-128-byte-elements.svg)
+![decode-128-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-128-byte-elements.svg)
 ##### 512 byte elements
-![decode-512-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-512-byte-elements.svg)
+![decode-512-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-512-byte-elements.svg)
  
 ####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
 
