@@ -37,10 +37,12 @@ public class DecodeBenchmark {
   private static final int ELEMENT_LENGTH = 32;
 
   @Param({
-             "JHEX_CHAR_ITERATOR",
              "JHEX_TO_CHAR_ARRAY",
-             "JHEX_CHAR_ITERATOR_CHECKED",
+             "JHEX_CHAR_AT",
+             "JHEX_CHAR_ITERATOR",
              "JHEX_TO_CHAR_ARRAY_CHECKED",
+             "JHEX_CHAR_AT_CHECKED",
+             "JHEX_CHAR_ITERATOR_CHECKED",
              "COMMONS_CODEC",
              "GUAVA",
              "JMX_DATATYPE_CONVERTER",
@@ -91,7 +93,7 @@ public class DecodeBenchmark {
     JHEX_CHAR_AT {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return hex -> JHex.decode((CharSequence)hex);
+        return hex -> JHex.decode((CharSequence) hex);
       }
     },
     JHEX_CHAR_ITERATOR {
@@ -109,7 +111,7 @@ public class DecodeBenchmark {
     JHEX_CHAR_AT_CHECKED {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return hex -> JHex.decodeChecked((CharSequence)hex);
+        return hex -> JHex.decodeChecked((CharSequence) hex);
       }
     },
     JHEX_CHAR_ITERATOR_CHECKED {
