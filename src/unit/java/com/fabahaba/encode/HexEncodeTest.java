@@ -28,6 +28,12 @@ public class HexEncodeTest {
   }
 
   @Test
+  public void decodeCharSequenceEncodeLower() {
+    final byte[] lower = JHex.decode((CharSequence) TEST_HEX);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
   public void decodeBytesEncodeLower() {
     final byte[] lower = JHex.decode(TEST_HEX.getBytes(US_ASCII));
     assertEquals(TEST_HEX, JHex.encode(lower));
@@ -42,6 +48,12 @@ public class HexEncodeTest {
   @Test
   public void decodeCheckedEncodeLower() {
     final byte[] lower = JHex.decodeChecked(TEST_HEX);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeCheckedCharSequenceEncodeLower() {
+    final byte[] lower = JHex.decodeChecked((CharSequence) TEST_HEX);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -66,9 +78,23 @@ public class HexEncodeTest {
   }
 
   @Test
+  public void decodeOffsetCharSequenceEncodeLower() {
+    final byte[] lower = new byte[TEST_HEX.length() >> 1];
+    JHex.decode((CharSequence) TEST_HEX, lower, 0);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
   public void decodeOffsetCheckedEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
     JHex.decodeChecked(TEST_HEX, lower, 0);
+    assertEquals(TEST_HEX, JHex.encode(lower));
+  }
+
+  @Test
+  public void decodeOffsetCheckedCharSequenceEncodeLower() {
+    final byte[] lower = new byte[TEST_HEX.length() >> 1];
+    JHex.decodeChecked((CharSequence) TEST_HEX, lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -341,9 +367,12 @@ public class HexEncodeTest {
 
   @Test
   public void decodeEmpty() {
+    final CharSequence emptyCharSequence = "";
+    assertArrayEquals(new byte[0], JHex.decode(emptyCharSequence));
     assertArrayEquals(new byte[0], JHex.decode(new byte[0]));
     assertArrayEquals(new byte[0], JHex.decode(new char[0]));
     assertArrayEquals(new byte[0], JHex.decode(ByteBuffer.wrap(new byte[0])));
+    assertArrayEquals(new byte[0], JHex.decodeChecked(emptyCharSequence));
     assertArrayEquals(new byte[0], JHex.decodeChecked(new char[0]));
     assertArrayEquals(new byte[0], JHex.decodeChecked(new byte[0]));
     assertArrayEquals(new byte[0], JHex.decodeChecked(ByteBuffer.wrap(new byte[0])));
@@ -352,6 +381,8 @@ public class HexEncodeTest {
 
     final byte[] empty = new byte[4];
     JHex.decodeChecked(new byte[0], empty, 0);
+    assertArrayEquals(new byte[4], empty);
+    JHex.decodeChecked(emptyCharSequence, empty, 0);
     assertArrayEquals(new byte[4], empty);
     JHex.decodeChecked(new char[0], empty, 0);
     assertArrayEquals(new byte[4], empty);
@@ -363,10 +394,14 @@ public class HexEncodeTest {
 
   @Test
   public void decodeNull() {
+    assertThrows(NullPointerException.class, () -> JHex.decodeChecked((CharSequence) null));
     assertThrows(NullPointerException.class, () -> JHex.decodeChecked((String) null));
     assertThrows(NullPointerException.class, () -> JHex.decodeChecked((char[]) null));
     assertThrows(NullPointerException.class, () -> JHex.decodeChecked((byte[]) null));
     assertThrows(NullPointerException.class, () -> JHex.decodeChecked((ByteBuffer) null));
+
+    assertThrows(NullPointerException.class,
+        () -> JHex.decodeChecked((CharSequence) null, new byte[0], 0));
     assertThrows(NullPointerException.class,
         () -> JHex.decodeChecked((String) null, new byte[0], 0));
     assertThrows(NullPointerException.class,
@@ -400,18 +435,26 @@ public class HexEncodeTest {
 
   private void decodeCheckedInvalidEncodings(final String invalid, final String expectedMsg) {
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
+        () -> JHex.decodeChecked((CharSequence) invalid)).getMessage());
+    assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
+        () -> JHex.decodeChecked((CharSequence) invalid, new byte[2], 0)).getMessage());
+
+    assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(invalid.toCharArray())).getMessage());
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(invalid.toCharArray(), new byte[2], 0)).getMessage());
+
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(invalid.getBytes(UTF_8))).getMessage());
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(invalid.getBytes(UTF_8), new byte[2], 0)).getMessage());
+
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(ByteBuffer.wrap(invalid.getBytes(UTF_8)))).getMessage());
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(ByteBuffer.wrap(invalid.getBytes(UTF_8)), new byte[2], 0))
         .getMessage());
+
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodePrimIterChecked(invalid)).getMessage());
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,

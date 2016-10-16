@@ -88,16 +88,28 @@ public class DecodeBenchmark {
         return JHex::decode;
       }
     },
-    JHEX_TO_CHAR_ARRAY_CHECKED {
+    JHEX_CHAR_AT {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return JHex::decodeChecked;
+        return hex -> JHex.decode((CharSequence)hex);
       }
     },
     JHEX_CHAR_ITERATOR {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
         return JHex::decodePrimIter;
+      }
+    },
+    JHEX_TO_CHAR_ARRAY_CHECKED {
+      @Override
+      public Function<String, byte[]> createDecodeFunction() {
+        return JHex::decodeChecked;
+      }
+    },
+    JHEX_CHAR_AT_CHECKED {
+      @Override
+      public Function<String, byte[]> createDecodeFunction() {
+        return hex -> JHex.decodeChecked((CharSequence)hex);
       }
     },
     JHEX_CHAR_ITERATOR_CHECKED {

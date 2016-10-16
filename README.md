@@ -12,18 +12,21 @@ String reEncoded = JHex.encode(decoded);
 
 ###Hello Worlds
 
-I'm using this project to try out tool integration with Java 9 and some other new things.
+I'm using this project to try out tool integrations with Java 9 and some other new things.
 
 - [x] [Gradle JMH plugin](https://github.com/melix/jmh-gradle-plugin).
-- [x] Java 9 String#chars() performance compared to String#toCharArray().
+- [x] String chars() vs. toCharArray() vs. charAt(int) performance comparison.
 - [x] JUnit 5 with Java 9 & Gradle.
 - [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & codecov.io integration.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
 - [x] JDK 9 on Travis CI.
-- [ ] Gradle findbugs plugin.  Waiting on version 3.1.
+- [ ] Gradle findbugs plugin... pending release of version 3.1.
+- [ ] Jigsaw module build with Gradle.
 
 
 ###Benchmarks
+
 ######Environment
+
 * Intel® Xeon(R) CPU E5-2687W v3 @ 3.10GHz × 20 / 128GB Memory / Ubuntu 16.04
 * VM: JDK 9-ea+140 / options: -server -Xmx16G
 * JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations.
@@ -32,7 +35,7 @@ I'm using this project to try out tool integration with Java 9 and some other ne
   * commons-codec:commons-codec:1.10
   * javax.xml.bind:jaxb-api:2.2.12
   
-Each benchmark method encodes or decodes an element from an array of 8388608 randomly generated elements.  The array is shuffled between each JMH iteration.
+Each benchmark method encodes or decodes an element from an array of 8,388,608 randomly generated elements.  The array is shuffled between each JMH iteration.
 
 ####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
 
