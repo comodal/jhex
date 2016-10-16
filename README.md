@@ -20,7 +20,7 @@ I'm using this project to try out tool integrations with Java 9 and some other n
 - [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & codecov.io integration.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
 - [x] JDK 9 on Travis CI.
 - [ ] Gradle findbugs plugin... pending release of version 3.1.
-- [ ] Jigsaw module build with Gradle.
+- [ ] Jigsaw module build with Gradle... pending gradle support.
 
 
 ###Benchmarks
@@ -29,7 +29,7 @@ I'm using this project to try out tool integrations with Java 9 and some other n
 
 * Intel® Xeon(R) CPU E5-2687W v3 @ 3.10GHz × 20 / 128GB Memory / Ubuntu 16.04
 * VM: JDK 9-ea+140 / options: -server -Xmx16G
-* JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations.
+* JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations. See [jmh task in build.gradle](build.gradle#L73) to configure.
 * Comparison Dependencies:
   * com.google.guava:guava:20.0-rc1
   * commons-codec:commons-codec:1.10
@@ -40,6 +40,8 @@ Each benchmark method encodes or decodes an element from an array of 8,388,608 r
 Actual result numbers can be found under [./benchmark](benchmark)
 
 ####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
+
+>./gradlew jmh -PbenchmarkRegex=Decode
 
 * JHEX_TO_CHAR_ARRAY: Uses `char[] String#toCharArray()`
 * JHEX_CHAR_ITERATOR: Uses `PrimitiveIterator.OfInt String#chars().iterator()`.  Corresponds to `JHex.decodePrimIter()`.
@@ -56,6 +58,8 @@ Actual result numbers can be found under [./benchmark](benchmark)
 ![decode-512-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-512-byte-elements.svg)
  
 ####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
+
+>./gradlew jmh -PbenchmarkRegex=Encode
 
 * JHEX_BYTE_STR_CTOR: Uses the Java String byte[] constructor, instead of char[].
 * JHEX_UPPER: Encodes to upper case, all other benchmarks use lower case.
