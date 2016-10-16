@@ -435,6 +435,11 @@ public class HexEncodeTest {
 
   private void decodeCheckedInvalidEncodings(final String invalid, final String expectedMsg) {
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
+        () -> JHex.decodeChecked(invalid)).getMessage());
+    assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
+        () -> JHex.decodeChecked(invalid, new byte[2], 0)).getMessage());
+
+    assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeCheckedToCharArray(invalid)).getMessage());
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeCheckedToCharArray(invalid, new byte[2], 0)).getMessage());
