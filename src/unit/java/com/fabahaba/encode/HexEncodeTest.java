@@ -29,7 +29,7 @@ public class HexEncodeTest {
 
   @Test
   public void decodeCharSequenceEncodeLower() {
-    final byte[] lower = JHex.decode((CharSequence) TEST_HEX);
+    final byte[] lower = JHex.decodeToCharArray(TEST_HEX);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -53,7 +53,7 @@ public class HexEncodeTest {
 
   @Test
   public void decodeCheckedCharSequenceEncodeLower() {
-    final byte[] lower = JHex.decodeChecked((CharSequence) TEST_HEX);
+    final byte[] lower = JHex.decodeCheckedToCharArray( TEST_HEX);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -80,7 +80,7 @@ public class HexEncodeTest {
   @Test
   public void decodeOffsetCharSequenceEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
-    JHex.decode((CharSequence) TEST_HEX, lower, 0);
+    JHex.decodeToCharArray( TEST_HEX, lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -94,7 +94,7 @@ public class HexEncodeTest {
   @Test
   public void decodeOffsetCheckedCharSequenceEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
-    JHex.decodeChecked((CharSequence) TEST_HEX, lower, 0);
+    JHex.decodeCheckedToCharArray(TEST_HEX, lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -435,9 +435,9 @@ public class HexEncodeTest {
 
   private void decodeCheckedInvalidEncodings(final String invalid, final String expectedMsg) {
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
-        () -> JHex.decodeChecked((CharSequence) invalid)).getMessage());
+        () -> JHex.decodeCheckedToCharArray(invalid)).getMessage());
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
-        () -> JHex.decodeChecked((CharSequence) invalid, new byte[2], 0)).getMessage());
+        () -> JHex.decodeCheckedToCharArray(invalid, new byte[2], 0)).getMessage());
 
     assertEquals(expectedMsg, assertThrows(IllegalArgumentException.class,
         () -> JHex.decodeChecked(invalid.toCharArray())).getMessage());

@@ -15,7 +15,7 @@ String reEncoded = JHex.encode(decoded);
 I'm using this project to try out tool integrations with Java 9 and some other new things.
 
 - [x] [Gradle JMH plugin](https://github.com/melix/jmh-gradle-plugin).
-- [x] String chars() vs. toCharArray() vs. charAt(int) performance comparison.
+- [x] String chars().iterator() vs. toCharArray() vs. charAt(int) performance comparison.
 - [x] JUnit 5 with Java 9 & Gradle.
 - [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & codecov.io integration.  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
 - [x] JDK 9 on Travis CI.
@@ -37,12 +37,14 @@ I'm using this project to try out tool integrations with Java 9 and some other n
   
 Each benchmark method encodes or decodes an element from an array of 8,388,608 randomly generated elements.  The array is shuffled between each JMH iteration.
 
+Actual result numbers can be found under [./benchmark](benchmark)
+
 ####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
 
-* JHEX_CHAR_ITERATOR: Uses the Java 9 primitive int iterator, String#chars().  Does not validate encoding.
-* JHEX_TO_CHAR_ARRAY: Uses String#toCharArray().  Does not validate encoding.
-* JHEX_CHAR_ITERATOR_CHECKED: Uses the Java 9 primitive int iterator, String#chars().  Validates encoding.
-* JHEX_TO_CHAR_ARRAY_CHECKED: Uses String#toCharArray().  Validates encoding.
+* JHEX_TO_CHAR_ARRAY: Uses `char[] String#toCharArray()`
+* JHEX_CHAR_ITERATOR: Uses `PrimitiveIterator.OfInt String#chars().iterator()`
+* JHEX_CHAR_AT: Uses `char String#chartAt(int)`
+* *_CHECKED: Validates encoding and length to match functionality of other libraries.
 
 ##### 8 byte elements
 ![decode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
@@ -55,10 +57,10 @@ Each benchmark method encodes or decodes an element from an array of 8,388,608 r
  
 ####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
 
-* JHEX_BYTE_STR_CTOR: Uses the Java String byte array constructor.
+* JHEX_BYTE_STR_CTOR: Uses the Java String byte[] constructor, instead of char[].
 * JHEX_UPPER: Encodes to upper case, all other benchmarks use lower case.
 * JHEX_REVERSE: Allows the user to encode by traversing the given data in reverse.
-* JHEX: Very similar to Apache Commons Codec implementation.  Uses the Java String char array constructor.
+* JHEX: Very similar to Apache Commons Codec implementation.  Uses the Java String char[] constructor.
 
 ##### 8 byte elements 
 ![encode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-8-byte-elements.svg)

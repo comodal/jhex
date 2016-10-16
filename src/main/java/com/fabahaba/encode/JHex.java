@@ -350,7 +350,7 @@ public final class JHex {
     }
   }
 
-  public static boolean isValid(final String hex) {
+  public static boolean isValid(final CharSequence hex) {
     if (hex == null) {
       return false;
     }
@@ -361,14 +361,13 @@ public final class JHex {
     if (len == 0) {
       return true;
     }
-    final char[] chars = hex.toCharArray();
     int index = 0;
     do {
-      char chr = chars[index++];
+      char chr = hex.charAt(index++);
       if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
         return false;
       }
-      chr = chars[index++];
+      chr = hex.charAt(index++);
       if (chr >= DIGITS.length || DIGITS[chr] == INVALID) {
         return false;
       }
@@ -376,7 +375,7 @@ public final class JHex {
     return true;
   }
 
-  public static boolean isLengthValid(final String hex) {
+  public static boolean isLengthValid(final CharSequence hex) {
     return hex != null && (hex.length() & 1) == 0;
   }
 
@@ -393,7 +392,7 @@ public final class JHex {
     }
   }
 
-  public static byte[] decode(final String hex) {
+  static byte[] decodeToCharArray(final String hex) {
     return decode(hex.toCharArray());
   }
 
@@ -461,7 +460,7 @@ public final class JHex {
     }
   }
 
-  public static byte[] decodeChecked(final String hex) {
+  static byte[] decodeCheckedToCharArray(final String hex) {
     return decodeChecked(hex.toCharArray());
   }
 
@@ -547,7 +546,7 @@ public final class JHex {
     }
   }
 
-  public static void decode(final String hex, final byte[] out, int offset) {
+  static void decodeToCharArray(final String hex, final byte[] out, int offset) {
     decode(hex.toCharArray(), out, offset);
   }
 
@@ -582,7 +581,7 @@ public final class JHex {
     }
   }
 
-  public static void decodeChecked(final String hex, final byte[] out, int offset) {
+  static void decodeCheckedToCharArray(final String hex, final byte[] out, int offset) {
     decodeChecked(hex.toCharArray(), out, offset);
   }
 

@@ -43,8 +43,8 @@ public class DecodeBenchmark {
              "JHEX_TO_CHAR_ARRAY_CHECKED",
              "JHEX_CHAR_AT_CHECKED",
              "JHEX_CHAR_ITERATOR_CHECKED",
-             "COMMONS_CODEC",
              "GUAVA",
+             "COMMONS_CODEC",
              "JMX_DATATYPE_CONVERTER",
          })
   private DecodeFactory decodeType;
@@ -87,13 +87,13 @@ public class DecodeBenchmark {
     JHEX_TO_CHAR_ARRAY {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return JHex::decode;
+        return JHex::decodeToCharArray;
       }
     },
     JHEX_CHAR_AT {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return hex -> JHex.decode((CharSequence) hex);
+        return JHex::decode;
       }
     },
     JHEX_CHAR_ITERATOR {
@@ -105,13 +105,13 @@ public class DecodeBenchmark {
     JHEX_TO_CHAR_ARRAY_CHECKED {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return JHex::decodeChecked;
+        return JHex::decodeCheckedToCharArray;
       }
     },
     JHEX_CHAR_AT_CHECKED {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
-        return hex -> JHex.decodeChecked((CharSequence) hex);
+        return JHex::decodeChecked;
       }
     },
     JHEX_CHAR_ITERATOR_CHECKED {
