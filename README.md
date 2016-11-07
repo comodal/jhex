@@ -30,7 +30,7 @@ I'm using this project to try out tool integrations with Java 9 and some other n
 ######Environment
 
 * Intel® Xeon(R) CPU E5-2687W v3 @ 3.10GHz × 20 / 128GB Memory / Ubuntu 16.04
-* VM: JDK 9-ea+140 / options: -server -Xmx16G
+* JDK 9-ea+140 / vm options: -server -Xmx16G
 * JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations. See [jmh task in build.gradle](build.gradle#L73) to configure.
 * Comparison Dependencies:
   * com.google.guava:guava:20.0-rc1
