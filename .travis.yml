@@ -3,15 +3,11 @@ dist: trusty
 group: edge
 language: java
 jdk: oraclejdk9
+
 notifications:
   email:
     on_success: never
     on_failure: always
-
-branches:
-  only:
-    - master
-    - /^jhex-.*$/
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -22,11 +18,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-before_install:
-  - pip install --user codecov
-
 install: ./gradlew -version
 
-script: if [ ! -z "$TRAVIS_TAG" ] || [[ "$COMMIT_MSG" != 'Release jhex'* ]] ; then ./gradlew check; fi
+script: ./gradlew check
 
-after_success: if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then ./gradlew bintrayUpload; elif [ -z "$TRAVIS_TAG" ] ; then ./gradlew junitPlatformJacocoReport; bash <(curl -s https://codecov.io/bash); fi
+after_success: if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then ./gradlew bintrayUpload; else ./gradlew jacocoTestReport; bash <(curl -s https://codecov.io/bash); fi

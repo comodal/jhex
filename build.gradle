@@ -1,189 +1,67 @@
 buildscript {
-  repositories {
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    jcenter()
-  }
-  dependencies {
-    classpath 'org.junit.platform:junit-platform-gradle-plugin:+'
-  }
+    apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/plugins.gradle'
+    apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/plugins.gradle'
+    dependencies {
+        classpath "$axion"
+        classpath "$bintray"
+        classpath "$jmh"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3'
+    }
 }
 
-plugins {
-  id 'java'
-  id 'pl.allegro.tech.build.axion-release' version '1.4.1'
-  id 'maven-publish'
-  id 'com.jfrog.bintray' version '1.7.2'
-  id 'checkstyle'
-  id 'me.champeau.gradle.jmh' version '0.3.1'
-  id 'jacoco'
-  // id 'findbugs' // Waiting for Java 9 support in findbugs 3.1.+
+ext {
+    desc = 'Just Hex (En|De)coding for Java'
 }
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/travisci.gradle'
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/java.gradle'
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/axion.gradle'
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/comodal.gradle'
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/bintray-maven.gradle'
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/checks.gradle'
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/jmh.gradle'
 
 apply plugin: 'org.junit.platform.gradle.plugin'
-
-scmVersion {
-  tag {
-    prefix = project.name
-  }
-
-  repository {
-    customUsername = "$System.env.AXION_RELEASE_GITHUB_TOKEN"
-    customPassword = ""
-  }
-
-  createReleaseCommit true
-  releaseCommitMessage { version, position -> "Release $project.name-$version" }
-
-  checks {
-    uncommittedChanges = false
-  }
-}
-
-project.group = 'com.fabahaba'
-project.version = scmVersion.version
 
 sourceCompatibility = JavaVersion.VERSION_1_9
 
 repositories {
-  maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-  jcenter()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    jcenter()
 }
 
 dependencies {
-  testCompile 'org.junit.platform:junit-platform-runner:+'
-  testCompile 'org.junit.jupiter:junit-jupiter-api:+'
-  testRuntime 'org.junit.jupiter:junit-jupiter-engine:+'
+    testCompile 'org.junit.platform:junit-platform-runner:+'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:+'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:+'
 
-  jmh 'commons-codec:commons-codec:+'
-  jmh 'com.google.guava:guava:+'
-  jmh 'javax.xml.bind:jaxb-api:+'
+    jmh 'commons-codec:commons-codec:+'
+    jmh 'com.google.guava:guava:+'
+    jmh 'javax.xml.bind:jaxb-api:+'
 }
 
 junitPlatform {
-  platformVersion '+'
+    platformVersion '+'
 }
 
 test {
-  maxParallelForks = 4
-  testLogging {
-    events "passed", "skipped", "failed", "standardOut", "standardError"
-  }
-}
-
-jmh {
-  jmhVersion = '1.15'
-  if (project.hasProperty('benchmarkRegex')) {
-    include = project.benchmarkRegex
-  } else {
-    tasks.jmh.doFirst { throw new GradleException("jmh: includePattern expected") }
-  }
-  // Charts: http://nilskp.github.io/jmh-charts
-  resultFormat = 'json'
-  resultsFile = file("${buildDir}/reports/jmh/results.json")
-  jvmArgs = '-server -Xmx3G'
-  failOnError = true
-  fork = 1
-  forceGC = true
-  // [cl, comp, gc, stack, perf, perfnorm, perfasm, xperf, xperfasm, hs_cl, hs_comp, hs_gc, hs_rt, hs_thr]
-  profilers = []
+    maxParallelForks = 4
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 }
 
 sourceSets {
-  test {
-    java {
-      srcDir 'src/unit/java'
+    main {
+        java {
+            srcDir 'src/systems.comodal.jhex/java'
+        }
     }
-    resources {
-      srcDir 'src/unit/resources'
+    test {
+        java {
+            srcDir 'src/unit/java'
+        }
+        resources {
+            srcDir 'src/unit/resources'
+        }
     }
-  }
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-  from sourceSets.main.allSource
-  classifier = 'sources'
-}
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
-
-      artifact sourcesJar
-    }
-  }
-}
-
-artifacts {
-  archives sourcesJar
-}
-
-bintray {
-  user = "$System.env.BINTRAY_USER"
-  key = "$System.env.BINTRAY_API_KEY"
-  publications = ['mavenJava']
-  pkg {
-    repo = 'libs'
-    name = project.name
-    desc = 'Just Hex (En|De)coding for Java'
-    websiteUrl = 'https://github.com/jamespedwards42/' + project.name
-    vcsUrl = 'https://github.com/jamespedwards42/' + project.name
-    issueTrackerUrl = 'https://github.com/jamespedwards42/' + project.name + '/issues'
-    licenses = ["Apache-2.0"]
-    publish = true
-    version {
-      name = project.version
-      vcsTag = scmVersion.tag.prefix + '-' + project.version
-      gpg {
-        sign = true
-        passphrase = "$System.env.BINTRAY_GPG_PASSPHRASE"
-      }
-    }
-  }
-}
-
-bintrayUpload.onlyIf { !project.version.endsWith('SNAPSHOT') }
-
-project.afterEvaluate {
-  def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
-
-  jacoco {
-    toolVersion = "+"
-    reportsDir = file("$buildDir/jacocoReports")
-    applyTo junitPlatformTestTask
-  }
-
-  project.task(type: JacocoReport, "junitPlatformJacocoReport", {
-    sourceDirectories = files("./src/main")
-    classDirectories = files("$buildDir/classes/main")
-    reports {
-      xml.enabled = true
-      html.enabled = false
-      xml.destination "${buildDir}/jacocoReports/test/jacocoTestReport.xml"
-    }
-    executionData junitPlatformTestTask
-  })
-}
-
-//findbugs {
-//  toolVersion = "3.1.+"
-//  reportsDir = file("$project.buildDir/findbugsReports")
-//  effort = "max"
-//  reportLevel = "low"
-//  ignoreFailures = false
-//}
-//
-//tasks.withType(FindBugs) {
-//  reports {
-//    xml.enabled false
-//    html.enabled true
-//  }
-//}
-
-checkstyle {
-  config = resources.text.fromFile("checkstyle/google-checks.xml")
-  configProperties = [samedir: "${projectDir}/checkstyle"]
-  reportsDir = file("$project.buildDir/checkstyleReports")
-  toolVersion = "+"
-  ignoreFailures = false
 }

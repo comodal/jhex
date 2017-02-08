@@ -1,36 +1,16 @@
-package com.fabahaba.encode;
-
-import org.junit.jupiter.api.Test;
-
-import java.util.Locale;
-import java.util.function.Function;
+package systems.comodal.encode;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Locale;
+import java.util.function.Function;
+import org.junit.jupiter.api.Test;
+import systems.comodal.encode.JHex;
+
 public class GuavaTests {
-
-  @Test
-  public void testBase16() {
-    testEncodingWithCasing("", "");
-    testEncodingWithCasing("f", "66");
-    testEncodingWithCasing("fo", "666F");
-    testEncodingWithCasing("foo", "666F6F");
-    testEncodingWithCasing("foob", "666F6F62");
-    testEncodingWithCasing("fooba", "666F6F6261");
-    testEncodingWithCasing("foobar", "666F6F626172");
-  }
-
-  @Test
-  public void testBase16Offset() {
-    testEncodesWithOffset("foobar", 0, 6, "666F6F626172");
-    testEncodesWithOffset("foobar", 1, 5, "6F6F626172");
-    testEncodesWithOffset("foobar", 2, 3, "6F6261");
-    testEncodesWithOffset("foobar", 3, 1, "62");
-    testEncodesWithOffset("foobar", 4, 0, "");
-  }
 
   private static void testEncodesWithOffset(final String decoded, final int offset, final int len,
       final String encoded) {
@@ -59,6 +39,26 @@ public class GuavaTests {
   private static void testDecodes(final Function<String, byte[]> decoder, final String encoded,
       final String decoded) {
     assertArrayEquals(decoded.getBytes(UTF_8), decoder.apply(encoded));
+  }
+
+  @Test
+  public void testBase16() {
+    testEncodingWithCasing("", "");
+    testEncodingWithCasing("f", "66");
+    testEncodingWithCasing("fo", "666F");
+    testEncodingWithCasing("foo", "666F6F");
+    testEncodingWithCasing("foob", "666F6F62");
+    testEncodingWithCasing("fooba", "666F6F6261");
+    testEncodingWithCasing("foobar", "666F6F626172");
+  }
+
+  @Test
+  public void testBase16Offset() {
+    testEncodesWithOffset("foobar", 0, 6, "666F6F626172");
+    testEncodesWithOffset("foobar", 1, 5, "6F6F626172");
+    testEncodesWithOffset("foobar", 2, 3, "6F6261");
+    testEncodesWithOffset("foobar", 3, 1, "62");
+    testEncodesWithOffset("foobar", 4, 0, "");
   }
 
   @Test

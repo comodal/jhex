@@ -1,4 +1,4 @@
-package com.fabahaba.encode;
+package systems.comodal.encode;
 
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;

@@ -1,16 +1,16 @@
-package com.fabahaba.encode;
+package systems.comodal.encode;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import systems.comodal.encode.JHex;
 
 public class CommonsCodecTests {
 
@@ -113,7 +113,7 @@ public class CommonsCodecTests {
   public void testEncodeDecodeHexCharArrayRandom() {
     final Random random = ThreadLocalRandom.current();
 
-    for (int i = 5;i > 0;i--) {
+    for (int i = 5; i > 0; i--) {
       final byte[] data = new byte[random.nextInt(10000) + 1];
       random.nextBytes(data);
 

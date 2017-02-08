@@ -1,4 +1,4 @@
-package com.fabahaba.encode;
+package systems.comodal.encode;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -6,22 +6,15 @@ import java.util.PrimitiveIterator;
 
 public final class JHex {
 
-  private JHex() {}
-
-  private static final int INVALID = -1;
-
-  private static final char[] LOWER = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-      'a', 'b', 'c', 'd', 'e', 'f'};
-
-  private static final char[] UPPER = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-      'A', 'B', 'C', 'D', 'E', 'F'};
-
   static final byte[] LOWER_BYTES = new byte[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       'a', 'b', 'c', 'd', 'e', 'f'};
-
   static final byte[] UPPER_BYTES = new byte[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       'A', 'B', 'C', 'D', 'E', 'F'};
-
+  private static final int INVALID = -1;
+  private static final char[] LOWER = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      'a', 'b', 'c', 'd', 'e', 'f'};
+  private static final char[] UPPER = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      'A', 'B', 'C', 'D', 'E', 'F'};
   private static final int MAX_CHAR = 'f';
   private static final int[] DIGITS = new int[MAX_CHAR + 1];
 
@@ -30,10 +23,13 @@ public final class JHex {
     for (final char c : LOWER) {
       DIGITS[c] = Character.digit(c, 16);
     }
-    for (int i = 10;i < UPPER.length;++i) {
+    for (int i = 10; i < UPPER.length; ++i) {
       final char c = UPPER[i];
       DIGITS[c] = Character.digit(c, 16);
     }
+  }
+
+  private JHex() {
   }
 
   private static RuntimeException createIllegalLengthException(final int len) {
@@ -68,7 +64,7 @@ public final class JHex {
   private static char[] encode(final byte[] data, final char[] alpha) {
     final int len = data.length;
     final char[] hex = new char[len << 1];
-    for (int i = 0, h = 0, d;i < len;) {
+    for (int i = 0, h = 0, d; i < len; ) {
       d = data[i++] & 0xff;
       hex[h++] = alpha[d >>> 4];
       hex[h++] = alpha[d & 0xf];
@@ -87,7 +83,7 @@ public final class JHex {
   static byte[] encodeBytes(final byte[] data, final byte[] alpha) {
     final int len = data.length;
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, h = 0, d;i < len;) {
+    for (int i = 0, h = 0, d; i < len; ) {
       d = data[i++] & 0xff;
       hex[h++] = alpha[d >>> 4];
       hex[h++] = alpha[d & 0xf];
@@ -114,7 +110,7 @@ public final class JHex {
   private static char[] encode(final ByteBuffer data, final char[] alpha) {
     final int len = data.limit();
     final char[] hex = new char[len << 1];
-    for (int h = 0, d;h < hex.length;) {
+    for (int h = 0, d; h < hex.length; ) {
       d = data.get() & 0xff;
       hex[h++] = alpha[d >>> 4];
       hex[h++] = alpha[d & 0xf];
@@ -133,7 +129,7 @@ public final class JHex {
   static byte[] encodeBytes(final ByteBuffer data, final byte[] alpha) {
     final int len = data.limit();
     final byte[] hex = new byte[len << 1];
-    for (int h = 0, d;h < hex.length;) {
+    for (int h = 0, d; h < hex.length; ) {
       d = data.get() & 0xff;
       hex[h++] = alpha[d >>> 4];
       hex[h++] = alpha[d & 0xf];
@@ -162,7 +158,7 @@ public final class JHex {
       return new char[0];
     }
     final char[] hex = new char[len << 1];
-    for (int i = 0, d;;++offset) {
+    for (int i = 0, d; ; ++offset) {
       d = data[offset] & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -190,7 +186,7 @@ public final class JHex {
 
   private static char[] encode(final ByteBuffer data, final int len, final char[] alpha) {
     final char[] hex = new char[len << 1];
-    for (int i = 0, d;i < hex.length;) {
+    for (int i = 0, d; i < hex.length; ) {
       d = data.get() & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -208,7 +204,7 @@ public final class JHex {
 
   private static byte[] encodeBytes(final ByteBuffer data, final int len, final byte[] alpha) {
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d;i < hex.length;) {
+    for (int i = 0, d; i < hex.length; ) {
       d = data.get() & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -229,7 +225,7 @@ public final class JHex {
       return new byte[0];
     }
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d;;++offset) {
+    for (int i = 0, d; ; ++offset) {
       d = data[offset] & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -261,7 +257,7 @@ public final class JHex {
       return new char[0];
     }
     final char[] hex = new char[len << 1];
-    for (int i = 0, d;;--offset) {
+    for (int i = 0, d; ; --offset) {
       d = data[offset] & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -293,7 +289,7 @@ public final class JHex {
       return new char[0];
     }
     final char[] hex = new char[len << 1];
-    for (int i = 0, d;;--offset) {
+    for (int i = 0, d; ; --offset) {
       d = data.get(offset) & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -317,7 +313,7 @@ public final class JHex {
       return new byte[0];
     }
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d;;--offset) {
+    for (int i = 0, d; ; --offset) {
       d = data[offset] & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -341,7 +337,7 @@ public final class JHex {
       return new byte[0];
     }
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d;;--offset) {
+    for (int i = 0, d; ; --offset) {
       d = data.get(offset) & 0xff;
       hex[i++] = alpha[d >>> 4];
       hex[i++] = alpha[d & 0xf];
@@ -385,7 +381,7 @@ public final class JHex {
     if (data.length == 0) {
       return data;
     }
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0, c = 0; ; ++c) {
       data[i++] = (byte) (DIGITS[chars.charAt(c)] << 4 | DIGITS[chars.charAt(++c)]);
       if (i == data.length) {
         return data;
@@ -402,7 +398,7 @@ public final class JHex {
     if (data.length == 0) {
       return data;
     }
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0, c = 0; ; ++c) {
       data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
       if (i == data.length) {
         return data;
@@ -415,7 +411,7 @@ public final class JHex {
     if (data.length == 0) {
       return data;
     }
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0, c = 0; ; ++c) {
       data[i++] = (byte) (DIGITS[chars[c]] << 4 | DIGITS[chars[++c]]);
       if (i == data.length) {
         return data;
@@ -444,7 +440,7 @@ public final class JHex {
       throw createIllegalLengthException(len);
     }
     final byte[] data = new byte[len >> 1];
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0, c = 0; ; ++c) {
       char chr = chars.charAt(c);
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -473,7 +469,7 @@ public final class JHex {
       throw createIllegalLengthException(chars.length);
     }
     final byte[] data = new byte[chars.length >> 1];
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0, c = 0; ; ++c) {
       char chr = chars[c];
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -498,7 +494,7 @@ public final class JHex {
       throw createIllegalLengthException(chars.length);
     }
     final byte[] data = new byte[chars.length >> 1];
-    for (int i = 0, c = 0;;++c) {
+    for (int i = 0, c = 0; ; ++c) {
       byte chr = chars[c];
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -524,7 +520,7 @@ public final class JHex {
       throw createIllegalLengthException(len);
     }
     final byte[] data = new byte[len >> 1];
-    for (int i = 0;;) {
+    for (int i = 0; ; ) {
       byte chr = chars.get();
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, i * 2);
@@ -542,7 +538,7 @@ public final class JHex {
   }
 
   public static void decode(final CharSequence chars, final byte[] out, int offset) {
-    for (int c = 0, len = chars.length();c < len;) {
+    for (int c = 0, len = chars.length(); c < len; ) {
       out[offset++] = (byte) (DIGITS[chars.charAt(c++)] << 4 | DIGITS[chars.charAt(c++)]);
     }
   }
@@ -552,7 +548,7 @@ public final class JHex {
   }
 
   public static void decode(final char[] chars, final byte[] out, int offset) {
-    for (int c = 0;c < chars.length;) {
+    for (int c = 0; c < chars.length; ) {
       out[offset++] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
     }
   }
@@ -565,7 +561,7 @@ public final class JHex {
     if ((len & 1) != 0) {
       throw createIllegalLengthException(len);
     }
-    for (int c = 0;;++offset) {
+    for (int c = 0; ; ++offset) {
       char chr = chars.charAt(c);
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -593,7 +589,7 @@ public final class JHex {
     if ((chars.length & 1) != 0) {
       throw createIllegalLengthException(chars.length);
     }
-    for (int c = 0;;++offset) {
+    for (int c = 0; ; ++offset) {
       char chr = chars[c];
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -617,7 +613,7 @@ public final class JHex {
     if ((chars.length & 1) != 0) {
       throw createIllegalLengthException(chars.length);
     }
-    for (int c = 0;;++offset) {
+    for (int c = 0; ; ++offset) {
       byte chr = chars[c];
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -642,7 +638,7 @@ public final class JHex {
     if ((len & 1) != 0) {
       throw createIllegalLengthException(len);
     }
-    for (int c = 0;;++offset) {
+    for (int c = 0; ; ++offset) {
       byte chr = buffer.get();
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException(chr, c);
@@ -683,7 +679,7 @@ public final class JHex {
     }
     final byte[] data = new byte[len >> 1];
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
-    for (int index = 0;index < data.length;) {
+    for (int index = 0; index < data.length; ) {
       int chr = chars.nextInt();
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException((char) chr, index * 2);
@@ -715,7 +711,7 @@ public final class JHex {
       throw createIllegalLengthException(len);
     }
     final PrimitiveIterator.OfInt chars = hex.chars().iterator();
-    for (int index = 0;chars.hasNext();index += 2) {
+    for (int index = 0; chars.hasNext(); index += 2) {
       int chr = chars.nextInt();
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
         throw createIllegalCharException((char) chr, index);

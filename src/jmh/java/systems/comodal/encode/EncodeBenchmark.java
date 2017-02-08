@@ -1,7 +1,11 @@
-package com.fabahaba.encode;
+package systems.comodal.encode;
 
 import com.google.common.io.BaseEncoding;
-
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.binary.Hex;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -16,15 +20,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.stream.IntStream;
-
-import javax.xml.bind.DatatypeConverter;
-
-import static com.fabahaba.encode.DecodeBenchmark.shuffleArray;
-
 @State(Scope.Benchmark)
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
@@ -36,19 +31,18 @@ public class EncodeBenchmark {
   private static final int NUM_ELEMENTS = 1 << 23;
   private static final int MASK = NUM_ELEMENTS - 1;
   private static final int ELEMENT_LENGTH = 32;
-
+  private final byte[][] data = new byte[NUM_ELEMENTS][ELEMENT_LENGTH];
   @Param({
-             "JHEX_BYTE_STR_CTOR",
-             "JHEX_UPPER",
-             "JHEX_REVERSE",
-             "JHEX",
-             "COMMONS_CODEC",
-             "GUAVA",
-             "JMX_DATATYPE_CONVERTER",
-         })
+      "JHEX_BYTE_STR_CTOR",
+      "JHEX_UPPER",
+      "JHEX_REVERSE",
+      "JHEX",
+      "COMMONS_CODEC",
+      "GUAVA",
+      "JMX_DATATYPE_CONVERTER",
+  })
   private EncodeFactory encodeType;
   private Function<byte[], String> encodeFunction;
-  private final byte[][] data = new byte[NUM_ELEMENTS][ELEMENT_LENGTH];
 
   @Setup(Level.Iteration)
   public void setup(final ThreadState threadState) {
@@ -58,7 +52,7 @@ public class EncodeBenchmark {
       IntStream.range(0, NUM_ELEMENTS).parallel()
           .forEach(i -> ThreadLocalRandom.current().nextBytes(data[i]));
     } else {
-      shuffleArray(data);
+      DecodeBenchmark.shuffleArray(data);
     }
   }
 

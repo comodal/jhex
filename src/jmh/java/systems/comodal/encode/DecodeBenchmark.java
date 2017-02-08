@@ -1,7 +1,11 @@
-package com.fabahaba.encode;
+package systems.comodal.encode;
 
 import com.google.common.io.BaseEncoding;
-
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -17,13 +21,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.stream.IntStream;
-
-import javax.xml.bind.DatatypeConverter;
-
 @State(Scope.Benchmark)
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
@@ -35,21 +32,30 @@ public class DecodeBenchmark {
   private static final int NUM_ELEMENTS = 1 << 23;
   private static final int MASK = NUM_ELEMENTS - 1;
   private static final int ELEMENT_LENGTH = 32;
-
+  private final String[] hexStrings = new String[NUM_ELEMENTS];
   @Param({
-             "JHEX_TO_CHAR_ARRAY",
-             "JHEX_CHAR_AT",
-             "JHEX_CHAR_ITERATOR",
-             "JHEX_TO_CHAR_ARRAY_CHECKED",
-             "JHEX_CHAR_AT_CHECKED",
-             "JHEX_CHAR_ITERATOR_CHECKED",
-             "GUAVA",
-             "COMMONS_CODEC",
-             "JMX_DATATYPE_CONVERTER",
-         })
+      "JHEX_TO_CHAR_ARRAY",
+      "JHEX_CHAR_AT",
+      "JHEX_CHAR_ITERATOR",
+      "JHEX_TO_CHAR_ARRAY_CHECKED",
+      "JHEX_CHAR_AT_CHECKED",
+      "JHEX_CHAR_ITERATOR_CHECKED",
+      "GUAVA",
+      "COMMONS_CODEC",
+      "JMX_DATATYPE_CONVERTER",
+  })
   private DecodeFactory decodeType;
   private Function<String, byte[]> decodeFunction;
-  private final String[] hexStrings = new String[NUM_ELEMENTS];
+
+  static void shuffleArray(final Object[] array) {
+    final ThreadLocalRandom rand = ThreadLocalRandom.current();
+    for (int i = array.length - 1; i > 0; --i) {
+      int index = rand.nextInt(i + 1);
+      final Object swap = array[i];
+      array[i] = array[index];
+      array[index] = swap;
+    }
+  }
 
   @Setup(Level.Iteration)
   public void setup(final ThreadState threadState) {
@@ -64,16 +70,6 @@ public class DecodeBenchmark {
           });
     } else {
       shuffleArray(hexStrings);
-    }
-  }
-
-  static void shuffleArray(final Object[] array) {
-    final ThreadLocalRandom rand = ThreadLocalRandom.current();
-    for (int i = array.length - 1;i > 0;--i) {
-      int index = rand.nextInt(i + 1);
-      final Object swap = array[i];
-      array[i] = array[index];
-      array[index] = swap;
     }
   }
 

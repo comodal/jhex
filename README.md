@@ -1,6 +1,6 @@
-# jhex [![Build Status](https://travis-ci.org/jamespedwards42/jhex.svg?branch=master)](https://travis-ci.org/jamespedwards42/jhex) [ ![Download](https://api.bintray.com/packages/jamespedwards42/libs/jhex/images/download.svg) ](https://bintray.com/jamespedwards42/libs/jhex/_latestVersion) [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/jhex/jedipus/master/LICENSE) [![codecov](https://codecov.io/gh/jamespedwards42/jhex/branch/master/graph/badge.svg)](https://codecov.io/gh/jamespedwards42/jhex)
+# jhex [![Build Status](https://travis-ci.org/comodal/jhex.svg?branch=master)](https://travis-ci.org/comodal/jhex) [ ![Download](https://api.bintray.com/packages/comodal/libraries/jhex/images/download.svg) ](https://bintray.com/comodal/libraries/jhex/_latestVersion) [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE) [![codecov](https://codecov.io/gh/comodal/jhex/branch/master/graph/badge.svg)](https://codecov.io/gh/comodal/jhex)
 
-[JHex](src/main/java/com/fabahaba/encode/JHex.java#L7) provides static utility methods for encoding to and decoding from hexadecimal encoded data.
+[JHex](src/systems.comodal.jhex/java/systems/comodal/encode/JHex.java#L7) provides static utility methods for encoding to and decoding from hexadecimal encoded data.
 
 ```java
 String hexString = "596f752772652077656c636f6d652e";
@@ -10,28 +10,28 @@ String reEncoded = JHex.encode(decoded);
 // reEncoded.equals(hexString) == true ... promise.
 ```
 
-###Hello Worlds
+### Hello World's
 
 I'm using this project to try out tool integrations with Java 9 and some other new things.
 
 - [x] [Gradle JMH plugin](https://github.com/melix/jmh-gradle-plugin).
 - [x] String chars().iterator() vs. toCharArray() vs. charAt(int) performance comparison.
 - [x] JUnit 5 with Java 9 & Gradle.
-- [x] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & [codecov.io](https://codecov.io).  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
+- [ ] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & [codecov.io](https://codecov.io).  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
 - [x] JDK 9 on Travis CI.
 - [ ] Gradle findbugs plugin... pending release of version 3.1.
-- [ ] Jigsaw module build with Gradle... pending gradle support.
+- [ ] Jigsaw module build with Gradle... pending Gradle support.
 - [ ] Multiple release targets for JDK 7, 8 and 9.
 - [ ] Kotlin build script.
 
 
-###Benchmarks
+### Benchmarks
 
-######Environment
+###### Environment
 
 * Intel® Xeon(R) CPU E5-2687W v3 @ 3.10GHz × 20 / 128GB Memory / Ubuntu 16.04
 * JDK 9-ea+140 / vm options: -server -Xmx16G
-* JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations. See [jmh task in build.gradle](build.gradle#L73) to configure.
+* JMH 1.15, 1 thread, 5 warm-up & 10 measurement iterations.
 * Comparison Dependencies:
   * com.google.guava:guava:20.0-rc1
   * commons-codec:commons-codec:1.10
@@ -41,7 +41,7 @@ Each benchmark method encodes or decodes an element from an array of 8,388,608 r
 
 Actual result numbers can be found under [./benchmark](benchmark)
 
-####[Decoding](src/jmh/java/com/fabahaba/encode/DecodeBenchmark.java#L79)
+#### [Decoding](src/jmh/java/systems/comodal/encode/DecodeBenchmark.java#L79)
 
 >./gradlew jmh -PbenchmarkRegex=Decode
 
@@ -51,15 +51,15 @@ Actual result numbers can be found under [./benchmark](benchmark)
 * \*_CHECKED: Validates encoding and length to match functionality of other libraries. Corresponds to `JHex.*Checked()` methods.
 
 ##### 8-byte elements
-![decode-8-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-8-byte-elements.svg)
+![decode-8-byte-elements](https://rawgit.com/comodal/jhex/master/benchmark/decode-8-byte-elements.svg)
 ##### 32-byte elements
-![decode-32-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-32-byte-elements.svg)
+![decode-32-byte-elements](https://rawgit.com/comodal/jhex/master/benchmark/decode-32-byte-elements.svg)
 ##### 128-byte elements
-![decode-128-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-128-byte-elements.svg)
+![decode-128-byte-elements](https://rawgit.com/comodal/jhex/master/benchmark/decode-128-byte-elements.svg)
 ##### 512-byte elements
-![decode-512-byte-elements](https://rawgit.com/jamespedwards42/jhex/master/benchmark/decode-512-byte-elements.svg)
+![decode-512-byte-elements](https://rawgit.com/comodal/jhex/master/benchmark/decode-512-byte-elements.svg)
  
-####[Encoding](src/jmh/java/com/fabahaba/encode/EncodeBenchmark.java#L66)
+#### [Encoding](src/jmh/java/systems/comodal/encode/EncodeBenchmark.java#L66)
 
 >./gradlew jmh -PbenchmarkRegex=Encode
 
@@ -69,10 +69,10 @@ Actual result numbers can be found under [./benchmark](benchmark)
 * JHEX: Very similar to Apache Commons Codec implementation.  Uses the Java String char[] constructor.
 
 ##### 8-byte elements 
-![encode-8-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-8-byte-elements.svg)
+![encode-8-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-8-byte-elements.svg)
 ##### 32-byte elements
-![encode-32-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-32-byte-elements.svg)
+![encode-32-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-32-byte-elements.svg)
 ##### 128-byte elements
-![encode-128-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-128-byte-elements.svg)
+![encode-128-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-128-byte-elements.svg)
 ##### 512-byte elements
-![encode-512-byte-elements](https://cdn.rawgit.com/jamespedwards42/jhex/master/benchmark/encode-512-byte-elements.svg)
+![encode-512-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-512-byte-elements.svg)

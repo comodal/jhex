@@ -1,12 +1,4 @@
-package com.fabahaba.encode;
-
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.nio.ByteBuffer;
-import java.util.Locale;
+package systems.comodal.encode;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -16,10 +8,43 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.nio.ByteBuffer;
+import java.util.Locale;
+import org.junit.jupiter.api.Test;
+import systems.comodal.encode.JHex;
+
 public class HexEncodeTest {
 
   static final String TEST_HEX =
       "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b";
+
+  static byte[] copyReverse(final byte[] data) {
+    return copyReverse(data, 0, data.length);
+  }
+
+  static byte[] copyReverse(final byte[] data, int offset, final int len) {
+    offset += len;
+    final byte[] bytes = new byte[len];
+    for (int i = 0; i < len; ) {
+      bytes[i++] = data[--offset];
+    }
+    return bytes;
+  }
+
+  static void testPrivateCtor(final Class<?> clas) {
+    try {
+      Constructor<?> constructor = clas.getDeclaredConstructor();
+      assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+      constructor.setAccessible(true);
+      constructor.newInstance();
+    } catch (NoSuchMethodException | IllegalAccessException
+        | InvocationTargetException | InstantiationException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   @Test
   public void decodeEncodeLower() {
@@ -53,7 +78,7 @@ public class HexEncodeTest {
 
   @Test
   public void decodeCheckedCharSequenceEncodeLower() {
-    final byte[] lower = JHex.decodeCheckedToCharArray( TEST_HEX);
+    final byte[] lower = JHex.decodeCheckedToCharArray(TEST_HEX);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -80,7 +105,7 @@ public class HexEncodeTest {
   @Test
   public void decodeOffsetCharSequenceEncodeLower() {
     final byte[] lower = new byte[TEST_HEX.length() >> 1];
-    JHex.decodeToCharArray( TEST_HEX, lower, 0);
+    JHex.decodeToCharArray(TEST_HEX, lower, 0);
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
@@ -472,19 +497,6 @@ public class HexEncodeTest {
     assertEquals(TEST_HEX, JHex.encode(lower));
   }
 
-  static byte[] copyReverse(final byte[] data) {
-    return copyReverse(data, 0, data.length);
-  }
-
-  static byte[] copyReverse(final byte[] data, int offset, final int len) {
-    offset += len;
-    final byte[] bytes = new byte[len];
-    for (int i = 0;i < len;) {
-      bytes[i++] = data[--offset];
-    }
-    return bytes;
-  }
-
   @Test
   public void testLengthUtil() {
     assertTrue(JHex.isLengthValid("42"));
@@ -517,17 +529,5 @@ public class HexEncodeTest {
   @Test
   public void testConstructorIsPrivate() {
     testPrivateCtor(JHex.class);
-  }
-
-  static void testPrivateCtor(final Class<?> clas) {
-    try {
-      Constructor<?> constructor = clas.getDeclaredConstructor();
-      assertTrue(Modifier.isPrivate(constructor.getModifiers()));
-      constructor.setAccessible(true);
-      constructor.newInstance();
-    } catch (NoSuchMethodException | IllegalAccessException
-        | InvocationTargetException | InstantiationException e) {
-      throw new RuntimeException(e);
-    }
   }
 }
