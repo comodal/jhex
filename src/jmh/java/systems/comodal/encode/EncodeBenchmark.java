@@ -4,7 +4,6 @@ import com.google.common.io.BaseEncoding;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.binary.Hex;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -23,12 +22,12 @@ import org.openjdk.jmh.annotations.Warmup;
 @State(Scope.Benchmark)
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
-@OutputTimeUnit(TimeUnit.SECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 10)
 public class EncodeBenchmark {
 
-  private static final int NUM_ELEMENTS = 1 << 23;
+  private static final int NUM_ELEMENTS = 1 << 21;
   private static final int MASK = NUM_ELEMENTS - 1;
   private static final int ELEMENT_LENGTH = 32;
   private final byte[][] data = new byte[NUM_ELEMENTS][ELEMENT_LENGTH];
@@ -40,6 +39,7 @@ public class EncodeBenchmark {
       "COMMONS_CODEC",
       "GUAVA",
       "JMX_DATATYPE_CONVERTER",
+      "BC"
   })
   private EncodeFactory encodeType;
   private Function<byte[], String> encodeFunction;
@@ -49,8 +49,10 @@ public class EncodeBenchmark {
     threadState.index = 0;
     if (encodeFunction == null) {
       encodeFunction = encodeType.createEncodeFunction();
-      IntStream.range(0, NUM_ELEMENTS).parallel()
-          .forEach(i -> ThreadLocalRandom.current().nextBytes(data[i]));
+      final ThreadLocalRandom random = ThreadLocalRandom.current();
+      for (int i = 0; i < NUM_ELEMENTS; i++) {
+        ThreadLocalRandom.current().nextBytes(data[i]);
+      }
     } else {
       DecodeBenchmark.shuffleArray(data);
     }
@@ -104,6 +106,12 @@ public class EncodeBenchmark {
       @Override
       public Function<byte[], String> createEncodeFunction() {
         return DatatypeConverter::printHexBinary;
+      }
+    },
+    BC {
+      @Override
+      public Function<byte[], String> createEncodeFunction() {
+        return org.bouncycastle.util.encoders.Hex::toHexString;
       }
     };
 

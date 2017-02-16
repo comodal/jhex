@@ -37,6 +37,7 @@ dependencies {
     jmh 'commons-codec:commons-codec:+'
     jmh 'com.google.guava:guava:+'
     jmh 'javax.xml.bind:jaxb-api:+'
+    jmh 'org.bouncycastle:bcprov-jdk15on:+'
 }
 
 junitPlatform {

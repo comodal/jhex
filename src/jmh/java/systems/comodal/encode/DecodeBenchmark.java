@@ -4,7 +4,6 @@ import com.google.common.io.BaseEncoding;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -24,12 +23,12 @@ import org.openjdk.jmh.annotations.Warmup;
 @State(Scope.Benchmark)
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
-@OutputTimeUnit(TimeUnit.SECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 10)
 public class DecodeBenchmark {
 
-  private static final int NUM_ELEMENTS = 1 << 23;
+  private static final int NUM_ELEMENTS = 1 << 21;
   private static final int MASK = NUM_ELEMENTS - 1;
   private static final int ELEMENT_LENGTH = 32;
   private final String[] hexStrings = new String[NUM_ELEMENTS];
@@ -43,6 +42,7 @@ public class DecodeBenchmark {
       "GUAVA",
       "COMMONS_CODEC",
       "JMX_DATATYPE_CONVERTER",
+      "BC"
   })
   private DecodeFactory decodeType;
   private Function<String, byte[]> decodeFunction;
@@ -62,12 +62,12 @@ public class DecodeBenchmark {
     threadState.index = 0;
     if (decodeFunction == null) {
       decodeFunction = decodeType.createDecodeFunction();
-      IntStream.range(0, NUM_ELEMENTS).parallel()
-          .forEach(i -> {
-            final byte[] element = new byte[ELEMENT_LENGTH];
-            ThreadLocalRandom.current().nextBytes(element);
-            hexStrings[i] = JHex.encode(element);
-          });
+      final ThreadLocalRandom random = ThreadLocalRandom.current();
+      for (int i = 0; i < NUM_ELEMENTS; i++) {
+        final byte[] element = new byte[ELEMENT_LENGTH];
+        random.nextBytes(element);
+        hexStrings[i] = JHex.encode(element);
+      }
     } else {
       shuffleArray(hexStrings);
     }
@@ -139,6 +139,12 @@ public class DecodeBenchmark {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
         return DatatypeConverter::parseHexBinary;
+      }
+    },
+    BC {
+      @Override
+      public Function<String, byte[]> createDecodeFunction() {
+        return org.bouncycastle.util.encoders.Hex::decode;
       }
     };
 
