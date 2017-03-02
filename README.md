@@ -1,5 +1,7 @@
 # jhex [![Build Status](https://travis-ci.org/comodal/jhex.svg?branch=master)](https://travis-ci.org/comodal/jhex) [ ![Download](https://api.bintray.com/packages/comodal/libraries/jhex/images/download.svg) ](https://bintray.com/comodal/libraries/jhex/_latestVersion) [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE) [![codecov](https://codecov.io/gh/comodal/jhex/branch/master/graph/badge.svg)](https://codecov.io/gh/comodal/jhex)
 
+*Build Note:* [Gradle is currently broken for Java 9 past build 143](https://github.com/gradle/gradle/issues/1095). TravisCI builds will be broken until Gradle fixes their [Java 9 issues](https://github.com/gradle/gradle/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20Java%209) :/ Developing locally with JDK 9-ea build 143 works fine.
+
 [JHex](src/systems.comodal.jhex/java/systems/comodal/encode/JHex.java#L7) provides static utility methods for encoding to and decoding from hexadecimal encoded data.
 
 ```java

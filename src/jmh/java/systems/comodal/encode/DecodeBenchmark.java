@@ -1,6 +1,7 @@
 package systems.comodal.encode;
 
 import com.google.common.io.BaseEncoding;
+import io.ipfs.multibase.Base16;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -42,7 +43,8 @@ public class DecodeBenchmark {
       "GUAVA",
       "COMMONS_CODEC",
       "JMX_DATATYPE_CONVERTER",
-      "BC"
+      "BC",
+      "MULTIBASE"
   })
   private DecodeFactory decodeType;
   private Function<String, byte[]> decodeFunction;
@@ -145,6 +147,12 @@ public class DecodeBenchmark {
       @Override
       public Function<String, byte[]> createDecodeFunction() {
         return org.bouncycastle.util.encoders.Hex::decode;
+      }
+    },
+    MULTIBASE {
+      @Override
+      public Function<String, byte[]> createDecodeFunction() {
+        return Base16::decode;
       }
     };
 
