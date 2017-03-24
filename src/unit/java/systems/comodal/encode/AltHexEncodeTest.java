@@ -1,6 +1,5 @@
 package systems.comodal.encode;
 
-import static systems.comodal.encode.HexEncodeTest.copyReverse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Locale;

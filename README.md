@@ -1,15 +1,18 @@
 # jhex [![Build Status](https://travis-ci.org/comodal/jhex.svg?branch=master)](https://travis-ci.org/comodal/jhex) [ ![Download](https://api.bintray.com/packages/comodal/libraries/jhex/images/download.svg) ](https://bintray.com/comodal/libraries/jhex/_latestVersion) [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE) [![codecov](https://codecov.io/gh/comodal/jhex/branch/master/graph/badge.svg)](https://codecov.io/gh/comodal/jhex)
 
-*Build Note:* [Gradle is currently broken for Java 9 past build 143](https://github.com/gradle/gradle/issues/1095). TravisCI builds will be broken until Gradle fixes their [Java 9 issues](https://github.com/gradle/gradle/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20Java%209) :/ Developing locally with JDK 9-ea build 143 works fine.
-
-[JHex](src/systems.comodal.jhex/java/systems/comodal/encode/JHex.java#L7) provides static utility methods for encoding to and decoding from hexadecimal encoded data.
+[JHex](src/systems.comodal.jhex/java/systems/comodal/java.systems.comodal.encode/JHex.java#L7) provides static utility methods for encoding to and decoding from hexadecimal encoded data.
 
 ```java
-String hexString = "596f752772652077656c636f6d652e";
+String hexString = "4265207375726520746F206472696E6B20796F7572204F76616C74696E65";
 byte[] decoded = JHex.decode(hexString);
 System.out.println(new String(decoded));
 String reEncoded = JHex.encode(decoded);
 // reEncoded.equals(hexString) == true ... promise.
+```
+
+### Gradle Java 9 Build Workaround
+```sh
+export JAVA_OPTS='--permit-illegal-access'
 ```
 
 ### Hello World's
@@ -20,10 +23,11 @@ I'm using this project to try out tool integrations with Java 9 and some other n
 - [x] String chars().iterator() vs. toCharArray() vs. charAt(int) performance comparison.
 - [x] JUnit 5 with Java 9 & Gradle.
 - [ ] JUnit 5 & [Gradle Jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) & [codecov.io](https://codecov.io).  Stackoverflow user c-ledergerber [saved the day](http://stackoverflow.com/a/39386661/3754157) on this one.
-- [x] JDK 9 on Travis CI.
-- [ ] Gradle findbugs plugin... pending release of version 3.1.
+- [x] JDK 9 on Travis CI. Will work once they update to build 161.
+- [ ] JDK 9 jigsaw module build on Travis CI.
+- [ ] findbugs replacement? :(
 - [ ] Jigsaw module build with Gradle... pending Gradle support.
-- [ ] Multiple release targets for JDK 7, 8 and 9.
+- [ ] Multiple release targets for JDK 7, 8 and 9... pending Gradle support.
 - [ ] Kotlin build script.
 
 
@@ -43,7 +47,7 @@ Each benchmark method encodes or decodes an element from an array of 8,388,608 r
 
 Actual result numbers can be found under [./benchmark](benchmark)
 
-#### [Decoding](src/jmh/java/systems/comodal/encode/DecodeBenchmark.java#L79)
+#### [Decoding](src/jmh/java/systems/comodal/java.systems.comodal.encode/DecodeBenchmark.java#L79)
 
 >./gradlew jmh -PbenchmarkRegex=Decode
 
@@ -61,20 +65,20 @@ Actual result numbers can be found under [./benchmark](benchmark)
 ##### 512-byte elements
 ![decode-512-byte-elements](https://rawgit.com/comodal/jhex/master/benchmark/decode-512-byte-elements.svg)
  
-#### [Encoding](src/jmh/java/systems/comodal/encode/EncodeBenchmark.java#L66)
+#### [Encoding](src/jmh/java/systems/comodal/java.systems.comodal.encode/EncodeBenchmark.java#L66)
 
 >./gradlew jmh -PbenchmarkRegex=Encode
 
 * JHEX_BYTE_STR_CTOR: Uses the Java String byte[] constructor, instead of char[].
 * JHEX_UPPER: Encodes to upper case, all other benchmarks use lower case.
-* JHEX_REVERSE: Allows the user to encode by traversing the given data in reverse.
+* JHEX_REVERSE: Allows the user to java.systems.comodal.encode by traversing the given data in reverse.
 * JHEX: Very similar to Apache Commons Codec implementation.  Uses the Java String char[] constructor.
 
 ##### 8-byte elements 
-![encode-8-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-8-byte-elements.svg)
+![java.systems.comodal.encode-8-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/java.systems.comodal.encode-8-byte-elements.svg)
 ##### 32-byte elements
-![encode-32-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-32-byte-elements.svg)
+![java.systems.comodal.encode-32-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/java.systems.comodal.encode-32-byte-elements.svg)
 ##### 128-byte elements
-![encode-128-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-128-byte-elements.svg)
+![java.systems.comodal.encode-128-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/java.systems.comodal.encode-128-byte-elements.svg)
 ##### 512-byte elements
-![encode-512-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/encode-512-byte-elements.svg)
+![java.systems.comodal.encode-512-byte-elements](https://cdn.rawgit.com/comodal/jhex/master/benchmark/java.systems.comodal.encode-512-byte-elements.svg)

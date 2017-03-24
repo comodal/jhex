@@ -5,6 +5,7 @@ buildscript {
         classpath "$axion"
         classpath "$bintray"
         classpath "$jmh"
+        classpath "$buildScan"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3'
     }
 }
@@ -12,17 +13,22 @@ buildscript {
 ext {
     desc = 'Just Hex (En|De)coding for Java'
 }
+
+apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/build-scan.gradle'
+apply plugin: 'org.junit.platform.gradle.plugin'
 apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/travisci.gradle'
 apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/java.gradle'
 apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/axion.gradle'
 apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/comodal.gradle'
 apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/bintray-maven.gradle'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/checks.gradle'
+//apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/checks.gradle'
 apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/jmh.gradle'
 
-apply plugin: 'org.junit.platform.gradle.plugin'
-
 sourceCompatibility = JavaVersion.VERSION_1_9
+
+tasks.withType(Test) {
+    jvmArgs += ['-XX:+IgnoreUnrecognizedVMOptions', '--permit-illegal-access']
+}
 
 repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -56,7 +62,7 @@ test {
 sourceSets {
     main {
         java {
-            srcDir 'src/systems.comodal.jhex/java'
+            srcDir 'src/systems.comodal.jhex'
         }
     }
     test {

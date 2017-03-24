@@ -2,7 +2,6 @@ package systems.comodal.encode;
 
 import com.google.common.io.BaseEncoding;
 import io.ipfs.multibase.Base16;
-import io.ipfs.multibase.Multibase;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
