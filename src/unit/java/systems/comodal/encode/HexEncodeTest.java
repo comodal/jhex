@@ -14,7 +14,6 @@ import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import org.junit.jupiter.api.Test;
-import systems.comodal.encode.JHex;
 
 public class HexEncodeTest {
 
