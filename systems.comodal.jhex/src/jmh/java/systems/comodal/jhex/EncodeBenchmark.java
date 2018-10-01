@@ -1,24 +1,14 @@
-package systems.comodal.encode;
+package systems.comodal.jhex;
 
 import com.google.common.io.BaseEncoding;
 import io.ipfs.multibase.Base16;
+import org.apache.commons.codec.binary.Hex;
+import org.openjdk.jmh.annotations.*;
+
+import javax.xml.bind.DatatypeConverter;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import javax.xml.bind.DatatypeConverter;
-import org.apache.commons.codec.binary.Hex;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Threads;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Benchmark)
 @Threads(1)

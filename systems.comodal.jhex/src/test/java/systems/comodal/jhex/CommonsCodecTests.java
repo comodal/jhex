@@ -1,80 +1,79 @@
-package systems.comodal.encode;
+package systems.comodal.jhex;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import systems.comodal.jhex.JHex;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import org.junit.jupiter.api.Test;
-import systems.comodal.encode.JHex;
 
-public class CommonsCodecTests {
+import static org.junit.jupiter.api.Assertions.*;
+
+final class CommonsCodecTests {
 
   @Test
-  public void testDecodeCheckedHexCharArrayOddCharacters1() {
+  void testDecodeCheckedHexCharArrayOddCharacters1() {
     assertEquals("Invalid hex encoding length of 1.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked(new char[]{'A'})).getMessage());
   }
 
   @Test
-  public void testDecodeCheckedHexStringOddCharacters1() {
+  void testDecodeCheckedHexStringOddCharacters1() {
     assertEquals("Invalid hex encoding length of 1.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked("A")).getMessage());
   }
 
   @Test
-  public void testDecodeCheckedHexCharArrayOddCharacters3() {
+  void testDecodeCheckedHexCharArrayOddCharacters3() {
     assertEquals("Invalid hex encoding length of 3.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked(new char[]{'A', 'B', 'C'})).getMessage());
   }
 
   @Test
-  public void testDecodeCheckedHexCharArrayOddCharacters5() {
+  void testDecodeCheckedHexCharArrayOddCharacters5() {
     assertEquals("Invalid hex encoding length of 5.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked(new char[]{'A', 'B', 'C', 'D', 'E'})).getMessage());
   }
 
   @Test
-  public void testDecodeBadCharacterPos0() {
+  void testDecodeBadCharacterPos0() {
     assertEquals("Invalid character 'q' for hex encoding at position 0.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked("q0")).getMessage());
   }
 
   @Test
-  public void testDecodeBadCharacterPos1() {
+  void testDecodeBadCharacterPos1() {
     assertEquals("Invalid character 'q' for hex encoding at position 1.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked("0q")).getMessage());
   }
 
   @Test
-  public void testDecodeByteArrayEmpty() {
+  void testDecodeByteArrayEmpty() {
     assertArrayEquals(new byte[0], JHex.decodeChecked(new char[0]));
   }
 
   @Test
-  public void testDecodeByteArrayOddCharacters() {
+  void testDecodeByteArrayOddCharacters() {
     assertEquals("Invalid hex encoding length of 1.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked(new char[]{65})).getMessage());
   }
 
   @Test
-  public void testDecodeByteBufferEmpty() {
+  void testDecodeByteBufferEmpty() {
     assertArrayEquals(new byte[0], JHex.decodeChecked(ByteBuffer.allocate(0)));
   }
 
   @Test
-  public void testDecodeByteBufferOddCharacters() {
+  void testDecodeByteBufferOddCharacters() {
     final ByteBuffer buffer = ByteBuffer.allocate(1);
     buffer.put((byte) 65);
     assertEquals("Invalid hex encoding length of 1.",
@@ -83,34 +82,34 @@ public class CommonsCodecTests {
   }
 
   @Test
-  public void testDecodeHexStringEmpty() {
+  void testDecodeHexStringEmpty() {
     assertArrayEquals(new byte[0], JHex.decodeChecked(""));
   }
 
   @Test
-  public void testDecodeHexStringOddCharacters() {
+  void testDecodeHexStringOddCharacters() {
     assertEquals("Invalid hex encoding length of 1.",
         assertThrows(IllegalArgumentException.class,
             () -> JHex.decodeChecked("6")).getMessage());
   }
 
   @Test
-  public void testEncodeByteArrayEmpty() {
+  void testEncodeByteArrayEmpty() {
     assertArrayEquals(new char[0], JHex.encodeChars(new byte[0]));
   }
 
   @Test
-  public void testEncodeByteBufferEmpty() {
+  void testEncodeByteBufferEmpty() {
     assertArrayEquals(new byte[0], JHex.encodeBytes(ByteBuffer.allocate(0)));
   }
 
   @Test
-  public void testEncodeCharsByteBufferEmpty() {
+  void testEncodeCharsByteBufferEmpty() {
     assertArrayEquals(new char[0], JHex.encodeChars(ByteBuffer.allocate(0)));
   }
 
   @Test
-  public void testEncodeDecodeHexCharArrayRandom() {
+  void testEncodeDecodeHexCharArrayRandom() {
     final Random random = ThreadLocalRandom.current();
 
     for (int i = 5; i > 0; i--) {
@@ -142,13 +141,13 @@ public class CommonsCodecTests {
   }
 
   @Test
-  public void testEncodeHexByteArrayEmpty() {
+  void testEncodeHexByteArrayEmpty() {
     assertArrayEquals(new char[0], JHex.encodeChars(new byte[0]));
     assertArrayEquals(new byte[0], JHex.encodeBytes(new byte[0]));
   }
 
   @Test
-  public void testEncodeHexByteArrayHelloWorldLowerCaseHex() {
+  void testEncodeHexByteArrayHelloWorldLowerCaseHex() {
     final byte[] data = "Hello World".getBytes(StandardCharsets.UTF_8);
     final String expected = "48656c6c6f20576f726c64";
     char[] actual;
@@ -159,7 +158,7 @@ public class CommonsCodecTests {
   }
 
   @Test
-  public void testEncodeHexByteBufferHelloWorldLowerCaseHex() {
+  void testEncodeHexByteBufferHelloWorldLowerCaseHex() {
     final ByteBuffer buffer = ByteBuffer.wrap("Hello World".getBytes(StandardCharsets.UTF_8));
     final String expected = "48656c6c6f20576f726c64";
     char[] actual;
@@ -171,50 +170,50 @@ public class CommonsCodecTests {
   }
 
   @Test
-  public void testEncodeHex_ByteBufferOfZeroes() {
+  void testEncodeHex_ByteBufferOfZeroes() {
     final char[] chars = JHex.encodeChars(ByteBuffer.allocate(36));
     assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
         new String(chars));
   }
 
   @Test
-  public void testEncodeHexByteString_ByteBufferOfZeroes() {
+  void testEncodeHexByteString_ByteBufferOfZeroes() {
     final String chars = JHex.encode(ByteBuffer.allocate(36));
     assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
         chars);
   }
 
   @Test
-  public void testEncodeHexByteArrayZeroes() {
+  void testEncodeHexByteArrayZeroes() {
     final char[] chars = JHex.encodeChars(new byte[36]);
     assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
         new String(chars));
   }
 
   @Test
-  public void testEncodeHexByteString_ByteArrayOfZeroes() {
+  void testEncodeHexByteString_ByteArrayOfZeroes() {
     final String chars = JHex.encode(new byte[36]);
     assertEquals("000000000000000000000000000000000000000000000000000000000000000000000000",
         chars);
   }
 
   @Test
-  public void testEncodeHexByteString_ByteArrayBoolean_ToLowerCase() {
+  void testEncodeHexByteString_ByteArrayBoolean_ToLowerCase() {
     assertEquals("0a", JHex.encode(new byte[]{10}));
   }
 
   @Test
-  public void testEncodeHexByteString_ByteArrayBoolean_ToUpperCase() {
+  void testEncodeHexByteString_ByteArrayBoolean_ToUpperCase() {
     assertEquals("0A", JHex.encodeUpper(new byte[]{10}));
   }
 
   @Test
-  public void testEncodeHexByteString_ByteBufferBoolean_ToLowerCase() {
+  void testEncodeHexByteString_ByteBufferBoolean_ToLowerCase() {
     assertEquals("0a", JHex.encode(ByteBuffer.wrap(new byte[]{10})));
   }
 
   @Test
-  public void testEncodeHexByteString_ByteBufferBoolean_ToUpperCase() {
+  void testEncodeHexByteString_ByteBufferBoolean_ToUpperCase() {
     assertEquals("0A", JHex.encodeUpper(ByteBuffer.wrap(new byte[]{10})));
   }
 }

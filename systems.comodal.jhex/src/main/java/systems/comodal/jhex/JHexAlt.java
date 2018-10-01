@@ -1,4 +1,4 @@
-package systems.comodal.encode;
+package systems.comodal.jhex;
 
 final class JHexAlt {
 

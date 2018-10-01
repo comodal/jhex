@@ -1,76 +1,10 @@
 buildscript {
-    apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/plugins.gradle'
-    apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/plugins.gradle'
-    dependencies {
-        classpath "$axion"
-        classpath "$bintray"
-        classpath "$jmh"
-        classpath "$buildScan"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
-    }
-}
-
-ext {
-    desc = 'Just Hex (En|De)coding for Java'
-}
-
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/build-scan.gradle'
-apply plugin: 'org.junit.platform.gradle.plugin'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/travisci.gradle'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/java.gradle'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/axion.gradle'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/comodal.gradle'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/bintray-maven.gradle'
-//apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/checks.gradle'
-apply from: 'https://raw.githubusercontent.com/comodal/gradle-conf/master/java/jmh.gradle'
-
-sourceCompatibility = JavaVersion.VERSION_1_9
-
-tasks.withType(Test) {
-    jvmArgs += ['-XX:+IgnoreUnrecognizedVMOptions', '--permit-illegal-access']
-}
-
-repositories {
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-    jcenter()
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    testCompile 'org.junit.platform:junit-platform-runner:+'
-    testCompile 'org.junit.jupiter:junit-jupiter-api:+'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:+'
-
-    jmh 'commons-codec:commons-codec:+'
-    jmh 'com.google.guava:guava:+'
-    jmh 'javax.xml.bind:jaxb-api:+'
-    jmh 'org.bouncycastle:bcprov-jdk15on:+'
-    jmh 'com.github.multiformats:java-multibase:v1.0.0'
-}
-
-junitPlatform {
-    platformVersion '+'
-}
-
-test {
-    maxParallelForks = 4
-    testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src/systems.comodal.jhex'
-        }
-    }
-    test {
-        java {
-            srcDir 'src/unit/java'
-        }
-        resources {
-            srcDir 'src/unit/resources'
-        }
-    }
+  repositories {
+    maven { url = 'https://plugins.gradle.org/m2/' }
+  }
+  dependencies {
+    classpath "pl.allegro.tech.build:axion-release-plugin:1.9.3"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
+    classpath "me.champeau.gradle:jmh-gradle-plugin:0.4.7"
+  }
 }

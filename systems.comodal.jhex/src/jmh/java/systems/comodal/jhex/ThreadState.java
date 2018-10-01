@@ -1,4 +1,4 @@
-package systems.comodal.encode;
+package systems.comodal.jhex;
 
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;

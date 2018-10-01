@@ -1,11 +1,13 @@
-sudo: required
 dist: trusty
-group: edge
-language: java
-jdk: oraclejdk9
+sudo: false
 
-env:
-  - JAVA_OPTS='--permit-illegal-access'
+language: java
+jdk: openjdk11
+
+before_install:
+# https://github.com/travis-ci/travis-ci/issues/8408
+# Also interferes with platform-tooling-support-tests expectations
+  - unset _JAVA_OPTIONS
 
 notifications:
   email:
@@ -21,8 +23,24 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-install: ./gradlew -version
+stages:
+  - name: build
+    if: tag IS blank
+  - name: publish
+    if: tag IS present
 
-script: ./gradlew check
+jobs:
+  include:
+    - stage: build
+      name: "Build and Test"
+      script:
+      - ./gradlew check
+      - ./gradlew jacocoTestReport
+      after_success:
+      - bash <(curl -s https://codecov.io/bash)
 
-after_success: if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then ./gradlew bintrayUpload; else ./gradlew jacocoTestReport; bash <(curl -s https://codecov.io/bash); fi
+    - stage: publish
+      name: "Publish to Bintray"
+      script:
+      - ./gradlew check
+      - ./gradlew :jhex:bintrayUpload

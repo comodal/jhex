@@ -1,0 +1,4 @@
+rootProject.name = 'jhex'
+
+include 'systems.comodal.jhex'
+project(':systems.comodal.jhex').name = 'jhex'
