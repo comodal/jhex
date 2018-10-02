@@ -15,11 +15,11 @@ import java.util.function.Function;
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 5)
-@Measurement(iterations = 10)
+@Warmup(iterations = 4)
+@Measurement(iterations = 7)
 public class DecodeBenchmark {
 
-  private static final int NUM_ELEMENTS = 1 << 21;
+  private static final int NUM_ELEMENTS = 1 << 17;
   private static final int MASK = NUM_ELEMENTS - 1;
   private static final int ELEMENT_LENGTH = 32;
   private final String[] hexStrings = new String[NUM_ELEMENTS];

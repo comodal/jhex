@@ -62,14 +62,20 @@ public final class JHex {
   }
 
   private static char[] encode(final byte[] data, final char[] alpha) {
-    final int len = data.length;
-    final char[] hex = new char[len << 1];
-    for (int i = 0, h = 0, d; i < len; ) {
-      d = data[i++] & 0xff;
-      hex[h++] = alpha[d >>> 4];
-      hex[h++] = alpha[d & 0xf];
-    }
+    final char[] hex = new char[data.length << 1];
+    encode(data, hex, 0, alpha);
     return hex;
+  }
+
+  private static void encode(final byte[] data,
+                             final char[] out, int outOffset,
+                             final char[] alpha) {
+    final int len = data.length;
+    for (int i = 0, d; i < len; ) {
+      d = data[i++] & 0xff;
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
+    }
   }
 
   public static byte[] encodeBytes(final byte[] data) {
@@ -81,14 +87,30 @@ public final class JHex {
   }
 
   static byte[] encodeBytes(final byte[] data, final byte[] alpha) {
-    final int len = data.length;
-    final byte[] hex = new byte[len << 1];
-    for (int i = 0, h = 0, d; i < len; ) {
-      d = data[i++] & 0xff;
-      hex[h++] = alpha[d >>> 4];
-      hex[h++] = alpha[d & 0xf];
-    }
+    final byte[] hex = new byte[data.length << 1];
+    encodeBytes(data, hex, 0, alpha);
     return hex;
+  }
+
+  public static void encodeBytes(final byte[] data,
+                                 final byte[] out, int outOffset) {
+    encodeBytes(data, out, outOffset, LOWER_BYTES);
+  }
+
+  public static void encodeUpperBytes(final byte[] data,
+                                      final byte[] out, int outOffset) {
+    encodeBytes(data, out, outOffset, UPPER_BYTES);
+  }
+
+  static void encodeBytes(final byte[] data,
+                          final byte[] out, int outOffset,
+                          final byte[] alpha) {
+    final int len = data.length;
+    for (int i = 0, d; i < len; ) {
+      d = data[i++] & 0xff;
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
+    }
   }
 
   public static String encode(final ByteBuffer data) {
@@ -108,14 +130,30 @@ public final class JHex {
   }
 
   private static char[] encode(final ByteBuffer data, final char[] alpha) {
-    final int len = data.limit();
-    final char[] hex = new char[len << 1];
-    for (int h = 0, d; h < hex.length; ) {
-      d = data.get() & 0xff;
-      hex[h++] = alpha[d >>> 4];
-      hex[h++] = alpha[d & 0xf];
-    }
+    final char[] hex = new char[data.limit() << 1];
+    encode(data, hex, 0, alpha);
     return hex;
+  }
+
+  public static void encodeChars(final ByteBuffer data,
+                                 final char[] out, int outOffset) {
+    encode(data, out, outOffset, LOWER);
+  }
+
+  public static void encodeUpperChars(final ByteBuffer data,
+                                      final char[] out, int outOffset) {
+    encode(data, out, outOffset, UPPER);
+  }
+
+  private static void encode(final ByteBuffer data,
+                             final char[] out, int outOffset,
+                             final char[] alpha) {
+    final int max = outOffset + (data.limit() << 1);
+    for (int d; outOffset < max; ) {
+      d = data.get() & 0xff;
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
+    }
   }
 
   public static byte[] encodeBytes(final ByteBuffer data) {
@@ -127,14 +165,31 @@ public final class JHex {
   }
 
   static byte[] encodeBytes(final ByteBuffer data, final byte[] alpha) {
-    final int len = data.limit();
-    final byte[] hex = new byte[len << 1];
-    for (int h = 0, d; h < hex.length; ) {
-      d = data.get() & 0xff;
-      hex[h++] = alpha[d >>> 4];
-      hex[h++] = alpha[d & 0xf];
-    }
+    final byte[] hex = new byte[data.limit() << 1];
+    encodeBytes(data, hex, 0, alpha);
     return hex;
+  }
+
+  public static void encodeBytes(final ByteBuffer data,
+                                 final byte[] out, int outOffset) {
+    encodeBytes(data, out, outOffset, LOWER_BYTES);
+  }
+
+  public static void encodeUpperBytes(final ByteBuffer data,
+                                      final byte[] out, int outOffset) {
+    encodeBytes(data, out, outOffset, UPPER_BYTES);
+  }
+
+
+  static void encodeBytes(final ByteBuffer data,
+                          final byte[] out, int outOffset,
+                          final byte[] alpha) {
+    final int max = outOffset + (data.limit() << 1);
+    for (int d; outOffset < max; ) {
+      d = data.get() & 0xff;
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
+    }
   }
 
   public static String encode(final byte[] data, int offset, final int len) {
@@ -154,17 +209,29 @@ public final class JHex {
   }
 
   private static char[] encode(final byte[] data, int offset, final int len, final char[] alpha) {
-    if (len == 0) {
-      return new char[0];
-    }
     final char[] hex = new char[len << 1];
-    for (int i = 0, d; ; ++offset) {
+    encode(data, offset, len, hex, 0, alpha);
+    return hex;
+  }
+
+  public static void encodeChars(final byte[] data, int offset, final int len,
+                                 final char[] out, int outOffset) {
+    encode(data, offset, len, out, outOffset, LOWER);
+  }
+
+  public static void encodeUpperChars(final byte[] data, int offset, final int len,
+                                      final char[] out, int outOffset) {
+    encode(data, offset, len, out, outOffset, UPPER);
+  }
+
+  private static void encode(final byte[] data, int offset, final int len,
+                             final char[] out, int outOffset,
+                             final char[] alpha) {
+    final int max = offset + len;
+    for (int d; offset < max; ++offset) {
       d = data[offset] & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-      if (i == hex.length) {
-        return hex;
-      }
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
     }
   }
 
@@ -186,12 +253,29 @@ public final class JHex {
 
   private static char[] encode(final ByteBuffer data, final int len, final char[] alpha) {
     final char[] hex = new char[len << 1];
-    for (int i = 0, d; i < hex.length; ) {
-      d = data.get() & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-    }
+    encode(data, len, hex, 0, alpha);
     return hex;
+  }
+
+  public static void encodeChars(final ByteBuffer data, final int len,
+                                 final char[] out, int outOffset) {
+    encode(data, len, out, outOffset, LOWER);
+  }
+
+  public static void encodeUpperChars(final ByteBuffer data, final int len,
+                                      final char[] out, int outOffset) {
+    encode(data, len, out, outOffset, UPPER);
+  }
+
+  private static void encode(final ByteBuffer data, final int len,
+                             final char[] out, int outOffset,
+                             final char[] alpha) {
+    final int max = outOffset + (len << 1);
+    for (int d; outOffset < max; ) {
+      d = data.get() & 0xff;
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
+    }
   }
 
   public static byte[] encodeBytes(final ByteBuffer data, final int len) {
@@ -204,12 +288,29 @@ public final class JHex {
 
   private static byte[] encodeBytes(final ByteBuffer data, final int len, final byte[] alpha) {
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d; i < hex.length; ) {
-      d = data.get() & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-    }
+    encodeBytes(data, len, hex, 0, alpha);
     return hex;
+  }
+
+  public static void encodeBytes(final ByteBuffer data, final int len,
+                                 final byte[] out, int outOffset) {
+    encodeBytes(data, len, out, outOffset, LOWER_BYTES);
+  }
+
+  public static void encodeUpperBytes(final ByteBuffer data, final int len,
+                                      final byte[] out, int outOffset) {
+    encodeBytes(data, len, out, outOffset, UPPER_BYTES);
+  }
+
+  private static void encodeBytes(final ByteBuffer data, final int len,
+                                  final byte[] out, int outOffset,
+                                  final byte[] alpha) {
+    final int max = outOffset + (len << 1);
+    for (int d; outOffset < max; ) {
+      d = data.get() & 0xff;
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
+    }
   }
 
   public static byte[] encodeBytes(final byte[] data, int offset, final int len) {
@@ -220,18 +321,31 @@ public final class JHex {
     return encodeBytes(data, offset, len, UPPER_BYTES);
   }
 
-  static byte[] encodeBytes(final byte[] data, int offset, final int len, final byte[] alpha) {
-    if (len == 0) {
-      return new byte[0];
-    }
+  static byte[] encodeBytes(final byte[] data, int offset, final int len,
+                            final byte[] alpha) {
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d; ; ++offset) {
+    encodeBytes(data, offset, len, hex, 0, alpha);
+    return hex;
+  }
+
+  public static void encodeBytes(final byte[] data, int offset, final int len,
+                                 final byte[] out, int outOffset) {
+    encodeBytes(data, offset, len, out, outOffset, LOWER_BYTES);
+  }
+
+  public static void encodeUpperBytes(final byte[] data, int offset, final int len,
+                                      final byte[] out, int outOffset) {
+    encodeBytes(data, offset, len, out, outOffset, UPPER_BYTES);
+  }
+
+  static void encodeBytes(final byte[] data, int offset, final int len,
+                          final byte[] out, int outOffset,
+                          final byte[] alpha) {
+    final int max = offset + len;
+    for (int d; offset < max; ++offset) {
       d = data[offset] & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-      if (i == hex.length) {
-        return hex;
-      }
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
     }
   }
 
@@ -252,18 +366,30 @@ public final class JHex {
   }
 
   private static char[] encodeReverse(final byte[] data, int offset, final int len,
-      final char[] alpha) {
-    if (len == 0) {
-      return new char[0];
-    }
+                                      final char[] alpha) {
     final char[] hex = new char[len << 1];
-    for (int i = 0, d; ; --offset) {
+    encodeReverse(data, offset, len, hex, 0, alpha);
+    return hex;
+  }
+
+  public static void encodeReverseChars(final byte[] data, int offset, final int len,
+                                        final char[] out, int outOffset) {
+    encodeReverse(data, offset, len, out, outOffset, LOWER);
+  }
+
+  public static void encodeUpperReverseChars(final byte[] data, int offset, final int len,
+                                             final char[] out, int outOffset) {
+    encodeReverse(data, offset, len, out, outOffset, UPPER);
+  }
+
+  private static void encodeReverse(final byte[] data, int offset, final int len,
+                                    final char[] out, int outOffset,
+                                    final char[] alpha) {
+    final int min = offset - len;
+    for (int d; offset > min; --offset) {
       d = data[offset] & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-      if (i == hex.length) {
-        return hex;
-      }
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
     }
   }
 
@@ -284,18 +410,30 @@ public final class JHex {
   }
 
   private static char[] encodeReverse(final ByteBuffer data, int offset, final int len,
-      final char[] alpha) {
-    if (len == 0) {
-      return new char[0];
-    }
+                                      final char[] alpha) {
     final char[] hex = new char[len << 1];
-    for (int i = 0, d; ; --offset) {
+    encodeReverse(data, offset, len, hex, 0, alpha);
+    return hex;
+  }
+
+  public static void encodeReverseChars(final ByteBuffer data, int offset, final int len,
+                                        final char[] out, int outOffset) {
+    encodeReverse(data, offset, len, out, outOffset, LOWER);
+  }
+
+  public static void encodeUpperReverseChars(final ByteBuffer data, int offset, final int len,
+                                             final char[] out, int outOffset) {
+    encodeReverse(data, offset, len, out, outOffset, UPPER);
+  }
+
+  private static void encodeReverse(final ByteBuffer data, int offset, final int len,
+                                    final char[] out, int outOffset,
+                                    final char[] alpha) {
+    final int min = offset - len;
+    for (int d; offset > min; --offset) {
       d = data.get(offset) & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-      if (i == hex.length) {
-        return hex;
-      }
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
     }
   }
 
@@ -308,18 +446,30 @@ public final class JHex {
   }
 
   static byte[] encodeReverseBytes(final byte[] data, int offset, final int len,
-      final byte[] alpha) {
-    if (len == 0) {
-      return new byte[0];
-    }
+                                   final byte[] alpha) {
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d; ; --offset) {
+    encodeReverseBytes(data, offset, len, hex, 0, alpha);
+    return hex;
+  }
+
+  public static void encodeReverseBytes(final byte[] data, int offset, final int len,
+                                        final byte[] out, int outOffset) {
+    encodeReverseBytes(data, offset, len, out, outOffset, LOWER_BYTES);
+  }
+
+  public static void encodeUpperReverseBytes(final byte[] data, int offset, final int len,
+                                             final byte[] out, int outOffset) {
+    encodeReverseBytes(data, offset, len, out, outOffset, UPPER_BYTES);
+  }
+
+  static void encodeReverseBytes(final byte[] data, int offset, final int len,
+                                 final byte[] out, int outOffset,
+                                 final byte[] alpha) {
+    final int min = offset - len;
+    for (int d; offset > min; --offset) {
       d = data[offset] & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-      if (i == hex.length) {
-        return hex;
-      }
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
     }
   }
 
@@ -332,18 +482,30 @@ public final class JHex {
   }
 
   static byte[] encodeReverseBytes(final ByteBuffer data, int offset, final int len,
-      final byte[] alpha) {
-    if (len == 0) {
-      return new byte[0];
-    }
+                                   final byte[] alpha) {
     final byte[] hex = new byte[len << 1];
-    for (int i = 0, d; ; --offset) {
+    encodeReverseBytes(data, offset, len, hex, 0, alpha);
+    return hex;
+  }
+
+  public static void encodeReverseBytes(final ByteBuffer data, int offset, final int len,
+                                        final byte[] out, int outOffset) {
+    encodeReverseBytes(data, offset, len, out, outOffset, LOWER_BYTES);
+  }
+
+  public static void encodeUpperReverseBytes(final ByteBuffer data, int offset, final int len,
+                                             final byte[] out, int outOffset) {
+    encodeReverseBytes(data, offset, len, out, outOffset, UPPER_BYTES);
+  }
+
+  static void encodeReverseBytes(final ByteBuffer data, int offset, final int len,
+                                 final byte[] out, int outOffset,
+                                 final byte[] alpha) {
+    final int min = offset - len;
+    for (int d; offset > min; --offset) {
       d = data.get(offset) & 0xff;
-      hex[i++] = alpha[d >>> 4];
-      hex[i++] = alpha[d & 0xf];
-      if (i == hex.length) {
-        return hex;
-      }
+      out[outOffset++] = alpha[d >>> 4];
+      out[outOffset++] = alpha[d & 0xf];
     }
   }
 
@@ -548,8 +710,13 @@ public final class JHex {
   }
 
   public static void decode(final char[] chars, final byte[] out, int offset) {
-    for (int c = 0; c < chars.length; ) {
-      out[offset++] = (byte) (DIGITS[chars[c++]] << 4 | DIGITS[chars[c++]]);
+    decode(chars, 0, chars.length, out, offset);
+  }
+
+  public static void decode(final char[] chars, int offset, final int len,
+                            final byte[] out, int outOffset) {
+    while (offset < len) {
+      out[outOffset++] = (byte) (DIGITS[chars[offset++]] << 4 | DIGITS[chars[offset++]]);
     }
   }
 
@@ -583,74 +750,88 @@ public final class JHex {
   }
 
   public static void decodeChecked(final char[] chars, final byte[] out, int offset) {
-    if (chars.length == 0) {
-      return;
-    }
-    if ((chars.length & 1) != 0) {
-      throw createIllegalLengthException(chars.length);
-    }
-    for (int c = 0; ; ++offset) {
-      char chr = chars[c];
-      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
-        throw createIllegalCharException(chr, c);
-      }
-      int bite = DIGITS[chr] << 4;
-      chr = chars[++c];
-      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
-        throw createIllegalCharException(chr, c);
-      }
-      out[offset] = (byte) (bite | DIGITS[chr]);
-      if (++c == chars.length) {
-        return;
-      }
-    }
+    decodeChecked(chars, 0, chars.length, out, offset);
   }
 
-  public static void decodeChecked(final byte[] chars, final byte[] out, int offset) {
-    if (chars.length == 0) {
-      return;
-    }
-    if ((chars.length & 1) != 0) {
-      throw createIllegalLengthException(chars.length);
-    }
-    for (int c = 0; ; ++offset) {
-      byte chr = chars[c];
-      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
-        throw createIllegalCharException(chr, c);
-      }
-      int bite = DIGITS[chr] << 4;
-      chr = chars[++c];
-      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
-        throw createIllegalCharException(chr, c);
-      }
-      out[offset] = (byte) (bite | DIGITS[chr]);
-      if (++c == chars.length) {
-        return;
-      }
-    }
-  }
-
-  public static void decodeChecked(final ByteBuffer buffer, final byte[] out, int offset) {
-    final int len = buffer.limit();
+  public static void decodeChecked(final char[] chars, int offset, final int len,
+                                   final byte[] out, int outOffset) {
     if (len == 0) {
       return;
     }
     if ((len & 1) != 0) {
       throw createIllegalLengthException(len);
     }
-    for (int c = 0; ; ++offset) {
+    for (; ; ++outOffset) {
+      char chr = chars[offset];
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
+        throw createIllegalCharException(chr, offset);
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars[++offset];
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
+        throw createIllegalCharException(chr, offset);
+      }
+      out[outOffset] = (byte) (bite | DIGITS[chr]);
+      if (++offset == len) {
+        return;
+      }
+    }
+  }
+
+  public static void decodeChecked(final byte[] chars, final byte[] out, int offset) {
+    decodeChecked(chars, 0, chars.length, out, offset);
+  }
+
+  public static void decodeChecked(final byte[] chars, int offset, final int len,
+                                   final byte[] out, int outOffset) {
+    if (len == 0) {
+      return;
+    }
+    if ((len & 1) != 0) {
+      throw createIllegalLengthException(len);
+    }
+    for (; ; ++outOffset) {
+      byte chr = chars[offset];
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
+        throw createIllegalCharException(chr, offset);
+      }
+      int bite = DIGITS[chr] << 4;
+      chr = chars[++offset];
+      if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
+        throw createIllegalCharException(chr, offset);
+      }
+      out[outOffset] = (byte) (bite | DIGITS[chr]);
+      if (++offset == len) {
+        return;
+      }
+    }
+  }
+
+  public static void decodeChecked(final ByteBuffer buffer, final byte[] out, int offset) {
+    decodeChecked(buffer, 0, buffer.limit(), out, offset);
+  }
+
+  public static void decodeChecked(final ByteBuffer buffer, int offset, final int len,
+                                   final byte[] out, int outOffset) {
+    if (len == 0) {
+      return;
+    }
+    if ((len & 1) != 0) {
+      throw createIllegalLengthException(len);
+    }
+    for (; ; ++outOffset) {
       byte chr = buffer.get();
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
-        throw createIllegalCharException(chr, c);
+        throw createIllegalCharException(chr, offset);
       }
       int bite = DIGITS[chr] << 4;
       chr = buffer.get();
       if (chr > MAX_CHAR || DIGITS[chr] == INVALID) {
-        throw createIllegalCharException(chr, ++c);
+        throw createIllegalCharException(chr, ++offset);
       }
-      out[offset] = (byte) (bite | DIGITS[chr]);
-      c += 2;
-      if (c == len) {
+      out[outOffset] = (byte) (bite | DIGITS[chr]);
+      offset += 2;
+      if (offset == len) {
         return;
       }
     }
